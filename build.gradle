@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'org.postgresql:postgresql'
@@ -39,4 +40,24 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// This disables plain archive built
+tasks.named('jar') {
+    enabled = false
+}
+
+// This section causes useful test output to go to the terminal.
+test {
+    testLogging {
+        events "passed", "skipped", "failed" //, "standardOut", "standardError"
+
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+
+        // Change to `true` for more verbose test output
+        showStandardStreams = false
+    }
 }
