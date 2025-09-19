@@ -1,0 +1,41 @@
+/* RESET */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* This can be used to see where the element-boxes are. */
+    /*outline: 1px solid lime;*/
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: initial;
+}
+
+button {
+    font: inherit;
+    border: initial;
+    outline: initial; /* create alternative for focus state */
+    background-color: initial;
+}
+
+input {
+    border: initial;
+    outline: initial; /* create alternative for focus state */
+    font: inherit;
+}
+
+/* APP */
+
+body {
+    background-color: #000000;
+    min-height: 100vh;
+    display: flex;
+}
