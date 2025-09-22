@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stories</title>
+    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a th:href="@{/}">
+            <img class="logo" th:src="@{/logo.png}" alt="logo">
+        </a>
+        <nav class="header-nav">
+            <a th:href="@{/stories}">Stories</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <h1>Tell your own story</h1>
+
+        <form action="#" th:action="@{/story}" th:object="${story}" method="post">
+
+            <label for="story-title"></label>
+            <input class="form-input" type="text" id="story-title" th:field="*{storyTitle}" required placeholder="Story Title"/>
+
+            <label for="story-text"></label>
+            <textarea class="form-input" id="story-text" rows="20" cols="80" spellcheck="false"
+                      th:field="*{storyText}" required placeholder="Tell your story"></textarea>
+
+            <input class="send" type="submit" value="Publish"/>
+        </form>
+
+    </main>
+
+    <footer class="footer">
+        <small>&copy; 2050 The Company. All rights reserved.</small>
+    </footer>
+</div>
+</body>
+</html>

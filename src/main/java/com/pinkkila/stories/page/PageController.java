@@ -14,6 +14,12 @@ import java.util.List;
 public class PageController {
     private final StoryService storyService;
     
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("story", new Story());
+        return "index";
+    }
+    
     @GetMapping("/stories")
     public String stories(Model model) {
         List<Story> stories = storyService.findAll();

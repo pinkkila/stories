@@ -13,4 +13,8 @@ public class StoryService {
     public List<Story> findAll() {
         return storyRepository.findAll();
     }
+    
+    public Story create(Story story) {
+        return storyRepository.save(story);
+    }
 }

@@ -36,6 +36,112 @@ input {
 
 body {
     background-color: #000000;
-    min-height: 100vh;
+}
+
+.container {
     display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 40px;
+    border-bottom: 2px solid rgb(255 255 255 / 0.1);
+    height: 60px;
+}
+
+.logo {
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+}
+
+.header-nav {
+    display: flex;
+    column-gap: 1.5rem;
+}
+
+.header-nav a {
+    color: rgb(255 255 255 / 0.5);
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.header-nav a:hover {
+    cursor: pointer;
+    color: rgb(255 255 255);
+    transition: 250ms;
+}
+
+h1 {
+    color: white;
+}
+
+p {
+    color: white;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 144px;
+    padding-right: 12px;
+    padding-left: 12px;
+}
+
+
+form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    column-gap: 1rem;
+}
+
+.form-input {
+    background-color: rgb(255 255 255 / 0.8);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border-radius: 15px ;
+    padding: 10px;
+}
+
+.form-input:focus {
+    background-color: rgb(255 255 255 / 0.9);
+}
+
+.send {
+    padding: 13px 30px;
+    border-radius: 25px;
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgb(255 255 255 / 1);
+    background: rgb(164 248 57 / 0.65); /* Matches .highlight color */
+    transition: all 0.3s ease;
+}
+
+.send:hover {
+    cursor: pointer;
+    background: rgb(164 248 57 / 0.75); /* Full opacity on hover */
+    transition: 250ms;
+}
+
+.send:focus {
+    outline: 3px solid rgb(164 248 57); /* Visible focus outline for accessibility */
+    outline-offset: 3px;
+}
+
+.footer {
+    margin-top: auto;
+    text-align: center;
+    padding-bottom: 2rem;
+}
+
+small {
+    color: rgb(255 255 255 / 0.8);
 }
