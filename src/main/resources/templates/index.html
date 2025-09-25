@@ -23,7 +23,8 @@
         <form action="#" th:action="@{/story}" th:object="${story}" method="post">
 
             <label for="story-title"></label>
-            <input class="form-input" type="text" id="story-title" th:field="*{storyTitle}" required placeholder="Story Title"/>
+            <textarea class="form-input" id="story-title" rows="1" cols="50" spellcheck="false" th:field="*{storyTitle}"
+                      required placeholder="Story Title"></textarea>
 
             <label for="story-text"></label>
             <textarea class="form-input" id="story-text" rows="20" cols="80" spellcheck="false"

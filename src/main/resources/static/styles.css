@@ -22,20 +22,38 @@ a {
 button {
     font: inherit;
     border: initial;
-    outline: initial; /* create alternative for focus state */
+    outline: initial;
     background-color: initial;
 }
 
 input {
     border: initial;
-    outline: initial; /* create alternative for focus state */
+    outline: initial;
     font: inherit;
 }
 
 /* APP */
 
+:root {
+    --color-background: #39445B;        /* 100% */
+    --color-background-75: #39445BBF;   /* 75% */
+    --color-background-50: #39445B80;     /* 50% */
+    --color-background-30: #39445B4D;   /* 30% */
+
+    --color-foreground: #ECE9E6;       /* 100% */
+    --color-foreground-75: #ECE9E6BF;  /* 75% */
+    --color-foreground-50: #ECE9E680;       /* 50% */
+    --color-foreground-30: #ECE9E64D;       /* 30% */
+
+
+    --color-accent: #9F97B8;        /* 100% */
+    --color-accent-75: #9F97B8;   /* 75% */
+    --color-accent-50: #9F97B880;     /* 50% */
+    --color-accent-30: #9F97B84D;   /* 30% */
+}
+
 body {
-    background-color: #000000;
+    background-color: var(--color-background);
 }
 
 .container {
@@ -48,10 +66,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 30px;
-    padding-right: 40px;
-    border-bottom: 2px solid rgb(255 255 255 / 0.1);
+    padding-left: 40px;
+    padding-right: 50px;
+    border-bottom: 1px solid var(--color-foreground-30);
     height: 60px;
+}
+
+.header a {
+    line-height: 0;
 }
 
 .logo {
@@ -66,23 +88,29 @@ body {
 }
 
 .header-nav a {
-    color: rgb(255 255 255 / 0.5);
+    color: var(--color-foreground-75);
     font-size: 1.25rem;
     font-weight: bold;
 }
 
 .header-nav a:hover {
     cursor: pointer;
-    color: rgb(255 255 255);
+    color: var(--color-foreground);
+    transition: 250ms;
+}
+
+.header-nav a:focus {
+    color: var(--color-foreground);
     transition: 250ms;
 }
 
 h1 {
-    color: white;
+    color: var(--color-foreground);
+    padding-bottom: 1rem;
 }
 
 p {
-    color: white;
+    color: var(--color-foreground-75);
 }
 
 .main {
@@ -94,16 +122,23 @@ p {
     padding-left: 12px;
 }
 
+label {
+    display: none;
+}
+
+textarea {
+    resize: none;
+}
 
 form {
     text-align: center;
     display: flex;
     flex-direction: column;
-    column-gap: 1rem;
+    gap: 1rem;
 }
 
 .form-input {
-    background-color: rgb(255 255 255 / 0.8);
+    background-color: var(--color-foreground-75);
     outline: 2px solid transparent;
     outline-offset: 2px;
     border-radius: 15px ;
@@ -111,28 +146,27 @@ form {
 }
 
 .form-input:focus {
-    background-color: rgb(255 255 255 / 0.9);
+    background-color: var(--color-foreground);
 }
 
 .send {
     padding: 13px 30px;
     border-radius: 25px;
-    margin-top: 1.5rem;
     font-size: 1.25rem;
     font-weight: 600;
-    color: rgb(255 255 255 / 1);
-    background: rgb(164 248 57 / 0.65); /* Matches .highlight color */
+    color: var(--color-foreground);
+    background: var(--color-accent-50);
     transition: all 0.3s ease;
 }
 
 .send:hover {
     cursor: pointer;
-    background: rgb(164 248 57 / 0.75); /* Full opacity on hover */
+    background: var(--color-accent);
     transition: 250ms;
 }
 
 .send:focus {
-    outline: 3px solid rgb(164 248 57); /* Visible focus outline for accessibility */
+    outline: 3px solid var(--color-accent-75);
     outline-offset: 3px;
 }
 
@@ -143,5 +177,5 @@ form {
 }
 
 small {
-    color: rgb(255 255 255 / 0.8);
+    color: var(--color-foreground-75);
 }
