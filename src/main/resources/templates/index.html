@@ -17,21 +17,24 @@
         </nav>
     </header>
 
-    <main class="main">
-        <h1>Tell your own story</h1>
+    <main>
+        <div class="write-container">
+            <h1>Tell your own story</h1>
 
-        <form action="#" th:action="@{/story}" th:object="${story}" method="post">
+            <form action="#" th:action="@{/story}" th:object="${story}" method="post">
 
-            <label for="story-title"></label>
-            <textarea class="form-input" id="story-title" rows="1" cols="50" spellcheck="false" th:field="*{storyTitle}"
-                      required placeholder="Story Title"></textarea>
+                <label for="story-title"></label>
+                <textarea class="form-input" id="story-title" rows="1" cols="50" spellcheck="false"
+                          th:field="*{storyTitle}"
+                          required placeholder="Story Title"></textarea>
 
-            <label for="story-text"></label>
-            <textarea class="form-input" id="story-text" rows="20" cols="80" spellcheck="false"
-                      th:field="*{storyText}" required placeholder="Tell your story"></textarea>
+                <label for="story-text"></label>
+                <textarea class="form-input" id="story-text" rows="20" cols="80" spellcheck="false"
+                          th:field="*{storyText}" required placeholder="Tell your story"></textarea>
 
-            <input class="send" type="submit" value="Publish"/>
-        </form>
+                <input class="send" type="submit" value="Publish"/>
+            </form>
+        </div>
 
     </main>
 

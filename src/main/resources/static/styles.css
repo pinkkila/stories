@@ -47,7 +47,7 @@ input {
 
 
     --color-accent: #9F97B8;        /* 100% */
-    --color-accent-75: #9F97B8;   /* 75% */
+    --color-accent-75: #9F97B8BF;   /* 75% */
     --color-accent-50: #9F97B880;     /* 50% */
     --color-accent-30: #9F97B84D;   /* 30% */
 }
@@ -113,11 +113,11 @@ p {
     color: var(--color-foreground-75);
 }
 
-.main {
+.write-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 144px;
+    margin-top: 120px;
     padding-right: 12px;
     padding-left: 12px;
 }
@@ -169,6 +169,33 @@ form {
     outline: 3px solid var(--color-accent-75);
     outline-offset: 3px;
 }
+
+.stories-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 30px;
+}
+
+.story-card {
+    color: var(--color-foreground);
+    background-color: var(--color-foreground-30);
+    border-radius: 15px;
+    padding: 20px;
+    width: 60%;
+}
+
+.story-card h2 {
+    border-bottom: 1px solid var(--color-foreground);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.story-card p {
+    white-space: pre-line;
+}
+
 
 .footer {
     margin-top: auto;

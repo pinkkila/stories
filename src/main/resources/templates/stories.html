@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stories</title>
-  <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stories</title>
+    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}"/>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <a th:href="@{/}">
-                <img class="logo" th:src="@{/logo.png}" alt="logo">
-            </a>
-            <nav class="header-nav">
-                <a th:href="@{/}">Home page</a>
-            </nav>
-        </header>
-        <h1>Stories</h1>
+<div class="container">
+    <header class="header">
+        <a th:href="@{/}">
+            <img class="logo" th:src="@{/logo.png}" alt="logo">
+        </a>
+        <nav class="header-nav">
+            <a th:href="@{/}">Home page</a>
+        </nav>
+    </header>
+    <main>
+        <div class="stories-container">
+            <h1>Stories</h1>
 
-    </div>
+            <th:block th:each="story : ${stories}">
+                <div class="story-card">
+                    <h2 th:text="${story.storyTitle}"></h2>
+
+                        <p th:text="${story.storyText}"></p>
+
+                </div>
+            </th:block>
+        </div>
+    </main>
+
+</div>
 
 </body>
 </html>
