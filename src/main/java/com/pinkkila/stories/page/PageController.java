@@ -15,9 +15,14 @@ public class PageController {
     private final StoryService storyService;
     
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("story", new Story());
+    public String index() {
         return "index";
+    }
+    
+    @GetMapping("/write")
+    public String write(Model model) {
+        model.addAttribute("story", new Story());
+        return "write";
     }
     
     @GetMapping("/stories")

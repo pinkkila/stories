@@ -14,26 +14,18 @@
         </a>
         <nav class="header-nav">
             <a th:href="@{/stories}">Stories</a>
+            <a th:href="@{/write}">Write your Story</a>
         </nav>
     </header>
 
     <main>
-        <div class="write-container">
-            <h1>Tell your own story</h1>
+        <div class="index-container">
+            <h1>Place to tell Stories</h1>
 
-            <form action="#" th:action="@{/story}" th:object="${story}" method="post">
 
-                <label for="story-title"></label>
-                <textarea class="form-input" id="story-title" rows="1" cols="50" spellcheck="false"
-                          th:field="*{storyTitle}"
-                          required placeholder="Story Title"></textarea>
+            <a th:href="@{/write}"><span>Write your story</span></a>
+            <a th:href="@{/stories}"><span>Read Stories that</span></a>
 
-                <label for="story-text"></label>
-                <textarea class="form-input" id="story-text" rows="20" cols="80" spellcheck="false"
-                          th:field="*{storyText}" required placeholder="Tell your story"></textarea>
-
-                <input class="send" type="submit" value="Publish"/>
-            </form>
         </div>
 
     </main>
