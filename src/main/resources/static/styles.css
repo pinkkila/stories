@@ -44,6 +44,7 @@ input {
     --color-foreground-75: #ECE9E6BF;  /* 75% */
     --color-foreground-50: #ECE9E680;       /* 50% */
     --color-foreground-30: #ECE9E64D;       /* 30% */
+    --color-foreground-15: #ECE9E626; /* 15% */
 
 
     --color-accent: #9F97B8;        /* 100% */
@@ -225,7 +226,6 @@ form {
 }
 
 .story-card {
-    color: var(--color-foreground);
     background-color: var(--color-foreground-30);
     border-radius: 15px;
     padding: 20px;
@@ -233,6 +233,7 @@ form {
 }
 
 .story-card h2 {
+    color: var(--color-foreground);
     border-bottom: 1px solid var(--color-foreground);
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
@@ -240,6 +241,8 @@ form {
 
 .story-card p {
     white-space: pre-line;
+    font-size: 1.15rem;
+    color: var(--color-foreground);
 }
 
 
