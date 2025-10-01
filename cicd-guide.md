@@ -3,34 +3,12 @@
 [//]: # (Todo: Write better info)
 This is guide for implementing CI/CD to AWS Fargate with Spring Boot and database using GitHub actions.
 
-### Preparations:
-
-#### Actuator
-
-- We use Actuator to expose endpoint that later tells if the service is up or not.
-- Add following dependency to `build.gradle`:
-```
-    implementation 'org.springframework.boot:spring-boot-starter-actuator' 
-```
-- Configure Actuator to expose health endpoint by adding following lines to the application.yaml:
-```
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-```
-- Now when you run the app you can check enpoint `http://localhost:8080/actuator/health`, you should get:
-```json
-{
-  "status": "UP"
-}
-```
 
 ### Build with GitHub Actions
 
-- In the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory. 
-- Next add this to the `deploy.yml`:
+- First make sure that your app builds successfully on your local environment, run `./gradlew build`.
+- Next in the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory. 
+- Add following lines to the `deploy.yml` (make sure that database and java-version values correspont to your own values):
 ```yaml
 name: Deploy to AWS
 
@@ -74,6 +52,35 @@ jobs:
       run: ./gradlew build
 ```
 
+- Now you can push the changes to the GitHub and the build should complete successfully. (Above we use `main` branch, but of course you can change it if you want).
+
+
+
+
+
+
+
+#### Actuator
+
+- We use Actuator to expose endpoint that later tells if the service is up or not.
+- Add following dependency to `build.gradle`:
+```
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' 
+```
+- Configure Actuator to expose health endpoint by adding following lines to the application.yaml:
+```
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+```
+- Now when you run the app you can check enpoint `http://localhost:8080/actuator/health`, you should get:
+```json
+{
+  "status": "UP"
+}
+```
 
 
 #### Spring Cloud AWS Secrets Manager
@@ -87,8 +94,11 @@ jobs:
   - Now you should have two application.yaml files: `application.yaml` and `application-aws.yaml`. 
   - application.yaml is automatically used as "default" profile and application-aws is used as "aws" profile.
 
-
-
+- Now when make a push to the GitHub the build fails:
+```
+        Caused by:
+        org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'secretsManagerClient' defined in class path resource [io/awspring/cloud/autoconfigure/config/secretsmanager/SecretsManagerAutoConfiguration.class]: Failed to instantiate [software.amazon.awssdk.services.secretsmanager.SecretsManagerClient]: Factory method 'secretsManagerClient' threw exception with message: Unable to load region from any of the providers in the chain software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain@1e295f7f: [software.amazon.awssdk.regions.providers.SystemSettingsRegionProvider@713497cd: Unable to load region from system settings. Region must be specified either via environment variable (AWS_REGION) or  system property (aws.region)., software.amazon.awssdk.regions.providers.AwsProfileRegionProvider@63318b56: No region provided in profile: default, software.amazon.awssdk.regions.providers.InstanceProfileRegionProvider@19e5e110: Unable to retrieve region information from EC2 Metadata service. Please make sure the application is running on EC2.]
+```
 
 
 
