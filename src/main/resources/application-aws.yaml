@@ -1,13 +1,8 @@
-spring:
-  config:
-    import: aws-secretsmanager:stories_db-secrets;
-
-  cloud:
-    aws:
-      secretsmanager:
-        region: eu-north-1
-
-  datasource:
-    username: ${username}
-    password: ${password}
-    url: jdbc:postgresql://${host}:${port}/${dbname}
+#spring:
+#  config:
+#    import: aws-secretsmanager:stories_db-secrets;
+#
+#  datasource:
+#    username: ${username}
+#    password: ${password}
+#    url: jdbc:postgresql://${host}:${port}/${dbname}

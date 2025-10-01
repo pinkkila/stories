@@ -11,6 +11,11 @@ spring:
     init:
       mode: always
 
+#  cloud:
+#    aws:
+#      secretsmanager:
+#        region: eu-north-1
+
 management:
   endpoints:
     web:
