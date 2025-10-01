@@ -54,13 +54,18 @@ jobs:
 
 - Now you can push the changes to the GitHub and the build should complete successfully. (Above we use `main` branch, but of course you can change it if you want).
 
+![img.png](cicd-guide-img/img1.png)
+
+- Build with Gradle Wrapper also runs tests (if test fails, the build fails):
+
+![img.png](cicd-guide-img/img2.png)
 
 
 
 
 
 
-#### Actuator
+#### Actuator in Spring Boot app
 
 - We use Actuator to expose endpoint that later tells if the service is up or not.
 - Add following dependency to `build.gradle`:
@@ -83,7 +88,7 @@ management:
 ```
 
 
-#### Spring Cloud AWS Secrets Manager
+#### Spring Cloud AWS Secrets Manager in Spring Boot app
 
 - Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use Spring Cloud AWS Secrets Manager dependency
 - Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager. Check the latest from Maven Central):
