@@ -61,7 +61,31 @@ jobs:
 ![img.png](cicd-guide-img/img2.png)
 
 
+## AWS VPC
 
+Go to VPC dashboard and select Create VPC:
+
+![img.png](cicd-guide-img/img3.png)
+
+![img.png](cicd-guide-img/img4.png)
+
+![img.png](cicd-guide-img/img5.png)
+
+#### Subnet names (put region that you are using):
+
+**eu-north-1a** 
+- stories-public-subnet1-eu-north-1a
+- stories-app-subnet1-eu-north-1a
+- stories-data-subnet1-eu-north-1a
+
+**eu-north-1b**
+- stories-public-subnet2-eu-north-1b
+- stories-app-subnet2-eu-north-1b
+- stories-data-subnet2-eu-north-1b
+
+
+
+![img.png](cicd-guide-img/img6.png)
 
 
 
