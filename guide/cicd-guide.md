@@ -132,6 +132,11 @@ spring:
 
 ![img.png](cicd-guide-img/img4.png)
 
+- NAT-gateway is needed if your app needs to fetch external resources (Google Fonts, Stripe API, etc.) at runtime.
+  - stories-app is simple app that doesn't call external resources so there is no need for NAT-gateway.
+
+[//]: # (- ‼️If you are following [Deploy Applications on AWS Fargate &#40;ECS Tutorial + Hands-On Project&#41;]&#40;https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s&#41;: NAT-gateway is used atleast with the Lambda that rotates database secrets. In this guide **VPC endpoint** is used instead of NAT-gateway.)
+
 ![img.png](cicd-guide-img/img5.png)
 
 #### Subnet names
@@ -169,23 +174,223 @@ spring:
 
 ## AWS ECR
 
-- Go to **Elastic Container Registry** and select **Create**
+- Go to **Elastic Container Registry** and select "Create"
 
 ![img.png](cicd-guide-img/img10.png)
 
-- After repository is created go to repository and select **View push commands**
+- After repository is created go to repository and select "View push commands"
 - Folow those commands and push image to the repository. (Remember build your Spring app with lates changes before push).
 
 
 
 ## AWS RDS
 
+- Navigate to **Aurora and RDS** service
+- First we need to create **DB Subnet group**. Select "Create DB subnet group"
+
+![img.png](cicd-guide-img/img11.png)
+
+- Next we create Database. Go to "Databases" in **RDS** and select "Create database"
+
+![img_1.png](cicd-guide-img/img12.png)
+
+- We will configure Secrets Manager later.
+
+![img_2.png](cicd-guide-img/img13.png)
+
+![img_3.png](cicd-guide-img/img14.png)
+
+- You can check from the "Additional configuration" that the port is correct. 
+
+![img_4.png](cicd-guide-img/img15.png)
+
+![img_5.png](cicd-guide-img/img16.png)
+
+- In "Additional configuration" add "Initial database name".
+
+![img_6.png](cicd-guide-img/img17.png)
+
+- Then select "Create".
+
+- You get notification where you can copy to master password. If you forget to do that, go to your db instance and select "Modify" and then set a new master password. 
+
+## AWS Secrets Manager, Secret rotation with Lambda, VPC endpoint
+
+- Create follown Security Group
+
+![img.png](cicd-guide-img/img18.png)
+
+- And then edit **stories-data-sg** security group by adding following inpound rule:
+
+![img_1.png](cicd-guide-img/img19.png)
+
+- Navigate to the AWS Secrets Manager service and select "Store a new secret"
+
+![img_2.png](cicd-guide-img/img20.png)
+
+- ❗️Make sure that "Secret name" matches excatly the one which is configured in the `application-aws.yaml`
+
+![img_3.png](cicd-guide-img/img21.png)
+
+![img_4.png](cicd-guide-img/img22.png)
+
+![img_5.png](cicd-guide-img/img23.png)
+
+![img_6.png](cicd-guide-img/img24.png)
+
+- Navigate to the **Lambda** service and select the created Lambda function. 
+- Then select "Configuration" and from there select "VPC" and then "Edit" and change Security Group for "stories-lambda-db-access-sg"
+
+![img_7.png](cicd-guide-img/img25.png)
+
+- Next create following Security Group:
+
+![img_13.png](cicd-guide-img/img26.png)
 
 
+- Navigate to **VPC** service, select "Endpoints" and "Create endpoint"
+
+![img_13.png](cicd-guide-img/img27.png)
+
+![img_14.png](cicd-guide-img/img28.png)
+
+![img_15.png](cicd-guide-img/img29.png)
 
 
+- After the enpoint is created, you can test rotation on the Secrets Manger service (Rotation -> Rotate secrets immediately).
 
 
+## Target Group
+
+- Navigate to **EC2** service and go to **Target Groups** and then select "Create target group"
+
+![img.png](cicd-guide-img/img31.png)
+
+![img_1.png](cicd-guide-img/img32.png)
+
+Remove manually entered IP address.
+
+![img_2.png](cicd-guide-img/img33.png)
+
+
+## Application Load Balancer
+
+- In **EC2** service go to the **Load Balancers** and select "Create load balancer" and then select "Application Load Balancer"
+
+![img_3.png](cicd-guide-img/img34.png)
+
+![img_4.png](cicd-guide-img/img35.png)
+
+- Check the Summary and select "Create load balancer"
+
+![img_5.png](cicd-guide-img/img36.png)
+
+
+## IAM Roles & Policies
+
+- Navigate to **IAM** service and go to the **Policies** and select "Create policy"
+
+- Select **Secret Manager** as a Service:
+
+![img_6.png](cicd-guide-img/img37.png)
+
+- From the list check "GetSecretValue"
+
+![img_7.png](cicd-guide-img/img38.png)
+
+- To other tab open **Secret Manager** service, select secret that we created earlier and copy **Secret ARN**
+
+- Go back to the policy creation page and select "Add ARNs"
+
+- Paste copiod ARN (when you paste ARN other fields will be filled automatically) and then select "Add ARNs". After that select "Next".
+
+![img_8.png](cicd-guide-img/img39.png)
+
+![img_9.png](cicd-guide-img/img40.png)
+
+- In the **IAM** service go to **Roles** and select "Create role"
+
+![img_10.png](cicd-guide-img/img41.png)
+
+![img_11.png](cicd-guide-img/img42.png)
+
+![img_12.png](cicd-guide-img/img43.png)
+
+![img_13.png](cicd-guide-img/img44.png)
+
+
+## ECS Cluster
+
+- Navigate to **Elastic Container Service**, go to **Clusters** and select "Create cluster"
+
+![img.png](cicd-guide-img/img45.png)
+
+
+## ECS Task definition
+
+- In **Elastic Container Service** go to **Task definition** and select "Create new task definition"
+
+- ❗️ Select for "Operating system/Architecture" "Linux/ARM64" if you used ARM64 for building image (e.g. Mac with M-series chip)
+
+![img_1.png](cicd-guide-img/img46.png)
+
+![img_2.png](cicd-guide-img/img47.png)
+
+![img_3.png](cicd-guide-img/img48.png)
+
+
+## ECS Service
+
+- Navigate to the cluster we created earlier and there in the "Services" section select "Create"
+
+![img_4.png](cicd-guide-img/img49.png)
+
+![img_5.png](cicd-guide-img/img50.png)
+
+![img_6.png](cicd-guide-img/img51.png)
+
+![img_7.png](cicd-guide-img/img52.png)
+
+![img_8.png](cicd-guide-img/img53.png)
+
+- When you press "Create" the deployment will start, but it will fail. We need to create missing VPC endpoints and Security Group. 
+
+## VPC endpoints
+
+https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
+
+![img_2.png](cicd-guide-img/img54.png)
+
+![img.png](cicd-guide-img/img55.png)
+
+![img_6.png](cicd-guide-img/img56.png)
+
+![img_3.png](cicd-guide-img/img57.png)
+
+![img_4.png](cicd-guide-img/img58.png)
+
+![img_5.png](cicd-guide-img/img59.png)
+
+![img_6.png](cicd-guide-img/img60.png)
+
+![img_7.png](cicd-guide-img/img61.png)
+
+![img_8.png](cicd-guide-img/img62.png)
+
+![img_9.png](cicd-guide-img/img63.png)
+
+![img_10.png](cicd-guide-img/img64.png)
+
+![img_11.png](cicd-guide-img/img65.png)
+
+![img_12.png](cicd-guide-img/img66.png)
+
+- We also need to add Security group "stories-vpc-endpoint-app-sg" to the "stories-vpc-endpoint-secrets-manager" so navigate there and add select "Manage security groups":
+
+![img_13.png](cicd-guide-img/img67.png)
+
+- Navigate back to the **Amazon Elastic Container** service and select **Clusters** -> cluster created earlier -> service created earlier -> from "Update service" select "Force new deployment"
+- When deployment is finnished, navigate to the **EC2** service and **Load Balancers** and select load balancer created earlier and copy "DNS name" and paste the address to the browser and make sure that your app is running. 
 
 
 
