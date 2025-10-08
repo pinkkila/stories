@@ -393,7 +393,52 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 - When deployment is finnished, navigate to the **EC2** service and **Load Balancers** and select load balancer created earlier and copy "DNS name" and paste the address to the browser and make sure that your app is running. 
 
 
+## Route 53 and Certificate Manager 
 
+- Next we need a domain and if you don't have one yeat, just navigate to **Route53** service dashboard and go to "Register domain".
+- If you already have a domain or your registeration is finished, navigate to **Certificate Manager** service and then select "Request":
+
+![img.png](cicd-guide-img/img68.png)
+
+![img_1.png](cicd-guide-img/img69.png)
+
+- Next you need to select "Create records in Route 53" 
+
+![img_2.png](cicd-guide-img/img70.png)
+
+![img_3.png](cicd-guide-img/img71.png)
+
+- Wait and check that certificate is validated and issued.
+
+- Navigate to **EC2** service, then **Load Balancers** and select load balancer that we created earlier. Select "Add listener"
+
+![img_4.png](cicd-guide-img/img72.png)
+
+![img_5.png](cicd-guide-img/img73.png)
+
+![img_6.png](cicd-guide-img/img74.png)
+
+- Navigate **Security groups** and modify alb-sg by adding the https 443:
+
+![img_7.png](cicd-guide-img/img75.png)
+
+- Back to load balancer and on "HTTP:80" select "Edit listener" 
+
+![img_8.png](cicd-guide-img/img76.png)
+
+![img_9.png](cicd-guide-img/img77.png)
+
+- Back to **Route 53** and in your **Hosted zone details**  select "Create record"
+
+![img_10.png](cicd-guide-img/img78.png)
+
+![img_11.png](cicd-guide-img/img79.png)
+
+- It might take few a minutes but now your app should be awailable in both your-domain.com and www&#46;your-domain.com
+
+![img_12.png](cicd-guide-img/img80.png)
+
+![img_14.png](cicd-guide-img/img81.png)
 
 
 
