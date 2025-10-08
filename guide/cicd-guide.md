@@ -441,6 +441,96 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 ![img_14.png](cicd-guide-img/img81.png)
 
 
+## OIDC provider
+
+- Navigate to the **IAM** service and then **Identity providers** and select "Add provider" 
+
+![img.png](cicd-guide-img/img82.png)
+
+- Go to the created Identity provider and select "Assign role"
+
+![img_1.png](cicd-guide-img/img83.png)
+
+![img_2.png](cicd-guide-img/img84.png)
+
+![img_3.png](cicd-guide-img/img85.png)
+
+![img_4.png](cicd-guide-img/img86.png)
+
+![img_5.png](cicd-guide-img/img87.png)
+
+- Navigate in **IAM** service to the **Policies** section and select "Create policy"
+- Select "JSON" and copy and paste the following json :
+
+```json
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "ManageTaskDefinitions",
+			"Effect": "Allow",
+			"Action": [
+				"ecs:DescribeTaskDefinition",
+				"ecs:RegisterTaskDefinition"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "DeployService",
+			"Effect": "Allow",
+			"Action": [
+				"ecs:DescribeServices",
+				"ecs:UpdateService"
+			],
+			"Resource": [
+                "Place your service ARN here! (remove this line❗️)",
+				"serviceArn........"
+			]
+		},
+		{
+			"Sid": "PassRolesInTaskDefinition",
+			"Effect": "Allow",
+			"Action": [
+				"iam:PassRole"
+			],
+			"Resource": [
+                "Place your executionRoleArn here! (remove this line❗️)",
+				"executionRoleArn......"
+			]
+		}
+	]
+}
+```
+
+- Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster we made earlier and from the "Service" section copy your service's ARN and place that to the policy json:
+
+![img_6.png](cicd-guide-img/img88.png)
+
+- Navigate to the Task definition we created earlier and view its JSON. Copy the value of the "executionRoleArn" and place it the policy json.
+
+![img_7.png](cicd-guide-img/img89.png)
+
+![img_8.png](cicd-guide-img/img90.png)
+
+- Go back to the **Roles** and go to the role that we creted earlier and select "Add permission" and "Attach policies"
+
+![img_9.png](cicd-guide-img/img91.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
