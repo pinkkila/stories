@@ -22,12 +22,13 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    name: Build, test and push image
+  build: # Change better name
+    name: Build, test and deploy
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.build-image.outputs.image }}
-      image_tag: ${{ steps.build-image.outputs.image_tag }}
+#    outputs:
+#      image: ${{ steps.build-image.outputs.image }}
+#      image_tag: ${{ steps.build-image.outputs.image_tag }}
+    environment: production
 
     services:
       postgres:
@@ -83,57 +84,86 @@ jobs:
     - name: Debug show image
       run: | 
         echo "image: ${{ steps.build-image.outputs.image }}"
-        
-        
-  deploy:
-    name: Register task + Deploy to ECS
-    needs: build
-    runs-on: ubuntu-latest
-    # run deploy only on push to main (prevents deploys from PRs/forks)
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    environment: production
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
 
-      - name: Debug show image
-        run: |
-          echo "image: ${{ needs.build.outputs.image }}"
-        
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition \
+          --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
+          --query 'taskDefinition' > /tmp/app-task-definition.json
 
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          audience: sts.amazonaws.com
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_IAM_ROLE }}
-
-      - name: Download task definition (latest ACTIVE revision for family)
-        run: |
-          aws ecs describe-task-definition \
-            --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
-            --query 'taskDefinition' > /tmp/app-task-definition.json
-
-      - name: Install jq & sanitize
-        run: |
-          sudo apt-get update && sudo apt-get install -y jq
+    - name: Install jq & sanitize task definitioin
+      run: |
+        sudo apt-get update && sudo apt-get install -y jq
           jq 'del(.taskDefinitionArn, .revision, .status, .registeredAt, .registeredBy)' \
             /tmp/app-task-definition.json > /tmp/app-task-definition.sanitized.json
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def-app
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: /tmp/app-task-definition.sanitized.json
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ needs.build.outputs.image }}
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def-app
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: /tmp/app-task-definition.sanitized.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def-app.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+      with:
+        task-definition: ${{ steps.task-def-app.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+        
+        
+#  deploy:
+#    name: Register task + Deploy to ECS
+#    needs: build
+#    runs-on: ubuntu-latest
+#    # run deploy only on push to main (prevents deploys from PRs/forks)
+#    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+#    environment: production
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#
+#      - name: Debug show image
+#        run: |
+#          echo "image: ${{ needs.build.outputs.image }}"
+#
+#
+#      - name: Configure AWS credentials (OIDC)
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          audience: sts.amazonaws.com
+#          aws-region: ${{ env.AWS_REGION }}
+#          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_IAM_ROLE }}
+#
+#      - name: Download task definition (latest ACTIVE revision for family)
+#        run: |
+#          aws ecs describe-task-definition \
+#            --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
+#            --query 'taskDefinition' > /tmp/app-task-definition.json
+#
+#      - name: Install jq & sanitize
+#        run: |
+#          sudo apt-get update && sudo apt-get install -y jq
+#          jq 'del(.taskDefinitionArn, .revision, .status, .registeredAt, .registeredBy)' \
+#            /tmp/app-task-definition.json > /tmp/app-task-definition.sanitized.json
+#
+#      - name: Fill in the new image ID in the Amazon ECS task definition
+#        id: task-def-app
+#        uses: aws-actions/amazon-ecs-render-task-definition@v1
+#        with:
+#          task-definition: /tmp/app-task-definition.sanitized.json
+#          container-name: ${{ env.CONTAINER_NAME }}
+#          image: ${{ needs.build.outputs.image }}
+#
+#      - name: Deploy Amazon ECS task definition
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+#        with:
+#          task-definition: ${{ steps.task-def-app.outputs.task-definition }}
+#          service: ${{ env.ECS_SERVICE }}
+#          cluster: ${{ env.ECS_CLUSTER }}
+#          wait-for-service-stability: true
