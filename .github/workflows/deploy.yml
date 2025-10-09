@@ -100,7 +100,7 @@ jobs:
 
       - name: Debug show image
         run: |
-          echo "image: ${{ steps.build.outputs.image }}"
+          echo "image: ${{ needs.build.outputs.image }}"
         
 
       - name: Configure AWS credentials (OIDC)
