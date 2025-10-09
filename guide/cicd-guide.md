@@ -517,8 +517,11 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 ![img_9.png](cicd-guide-img/img91.png)
 
 
+## GitHub Secrets
 
+- In your GitHub reposiroty navigate to the "Settings" and select "Secrets and variables". Then click "New repository secret"
 
+![img.png](cicd-guide-img/img92.png)
 
 
 

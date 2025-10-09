@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: CI/CD Build & Deploy to ECS
 
 on:
   push:
@@ -6,12 +6,28 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  AWS_REGION: eu-north-1                                      # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: stories                                     # set this to your Amazon ECR repository name
+  ECS_SERVICE: stories-task-definition-service-kcj0t5mk       # set this to your Amazon ECS service name
+  ECS_CLUSTER: stories-ecs-cluster                            # set this to your Amazon ECS cluster name
+  CONTAINER_NAME: stories-container                           # set this to the name of the container in the
+                                                              # containerDefinitions section of your task definition
+  AWS_IAM_ROLE: github-oidc-provider-aws-stories              # set this to your AWS OICD provider role
+  ECS_TASK_DEFINITION_FAMILY: stories-task-definition         # set this to your Amazon ECS task definition family
+                                                              # (name that we gave to the task definition)
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
-
+    name: Build, test and push image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    outputs:
+      image: ${{ steps.build-image.outputs.image }}
+      image_tag: ${{ steps.build-image.outputs.image_tag }}
 
     services:
       postgres:
@@ -24,20 +40,89 @@ jobs:
           - '5432:5432'
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
 
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
-    - name: Build with Gradle Wrapper
+    - name: Run tests and build
       env:
         AWS_REGION: eu-north-1
       run: ./gradlew build
 
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        audience: sts.amazonaws.com
+        aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_IAM_ROLE }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        
+        
+  deploy:
+    name: Register task + Deploy to ECS
+    needs: build
+    runs-on: ubuntu-latest
+    # run deploy only on push to main (prevents deploys from PRs/forks)
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_IAM_ROLE }}
+
+      - name: Download task definition (latest ACTIVE revision for family)
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
+            --query 'taskDefinition' > /tmp/app-task-definition.json
+
+      - name: Install jq & sanitize
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          jq 'del(.taskDefinitionArn, .revision, .status, .registeredAt, .registeredBy)' \
+            /tmp/app-task-definition.json > /tmp/app-task-definition.sanitized.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def-app
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: /tmp/app-task-definition.sanitized.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ needs.build.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def-app.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
