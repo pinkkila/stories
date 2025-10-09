@@ -460,7 +460,8 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 ![img_5.png](cicd-guide-img/img87.png)
 
 - Navigate in **IAM** service to the **Policies** section and select "Create policy"
-- Select "JSON" and copy and paste the following json :
+- Select "JSON" and copy and paste the following json:
+
 
 ```json
 {
@@ -494,8 +495,9 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 				"iam:PassRole"
 			],
 			"Resource": [
-                "Place your executionRoleArn here! (remove this line❗️)",
-				"executionRoleArn......"
+                "Place your executionRoleArn and taskRoleArn here! (remove this line❗️)",
+				"executionRoleArn......",
+                "taskRoleArn......"
 			]
 		}
 	]
@@ -507,6 +509,7 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 ![img_6.png](cicd-guide-img/img88.png)
 
 - Navigate to the Task definition we created earlier and view its JSON. Copy the value of the "executionRoleArn" and place it the policy json.
+- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *executionRoleArn* and *taskRoleArn* but in my case those are identical, so I have only placed one ARN.
 
 ![img_7.png](cicd-guide-img/img89.png)
 

@@ -7,7 +7,7 @@ on:
     branches: [ "main", "dev" ]
 
 jobs:
-  build:
+  build-run-tests:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,12 +41,18 @@ jobs:
 
       - name: Run tests (dev push)
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        env:
+          AWS_REGION: eu-north-1
         run: ./gradlew test
 
       - name: Full build and tests (dev PR)
         if: github.event_name == 'pull_request' && github.base_ref == 'dev'
+        env:
+          AWS_REGION: eu-north-1
         run: ./gradlew build
 
       - name: Full build and tests (main PR)
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        env:
+          AWS_REGION: eu-north-1
         run: ./gradlew build
