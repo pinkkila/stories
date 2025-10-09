@@ -80,7 +80,7 @@ jobs:
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    - name: Debug show
+    - name: Debug show image
       run: | 
         echo "image: ${{ steps.build-image.outputs.image }}"
         
@@ -96,6 +96,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+
+      - name: Debug show image
+        run: |
+          echo "image: ${{ steps.build.outputs.image }}"
+        
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
