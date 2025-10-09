@@ -1,4 +1,4 @@
-name: Build and run test
+name: Run test and build
 
 on:
   push:
@@ -31,13 +31,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
-
-      - name: Build with Gradle Wrapper
-        run: ./gradlew build
-
 
       - name: Run tests (dev push)
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
@@ -45,13 +40,13 @@ jobs:
           AWS_REGION: eu-north-1
         run: ./gradlew test
 
-      - name: Full build and tests (dev PR)
+      - name: Run tests and build (dev PR)
         if: github.event_name == 'pull_request' && github.base_ref == 'dev'
         env:
           AWS_REGION: eu-north-1
         run: ./gradlew build
 
-      - name: Full build and tests (main PR)
+      - name: Run tests and build (main PR)
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
         env:
           AWS_REGION: eu-north-1
