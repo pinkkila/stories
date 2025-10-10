@@ -5,22 +5,27 @@ CI/CD pipeline
 AWS Elastic Container Service (ECS).
 GitHub Actions
 Spring Boot
-
+IAAS Academy's YouTube video "Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)" is major source. 
 
 ## Preparations
 
-- Before anything make sure that your app builds successfully on your local environment, run `./gradlew build`.
+- First, verify that your application builds correctly in your local environment. Run:
+
+```
+./gradlew build
+```
+
 
 ### Actuator
 
-- We use Actuator to expose endpoint that later tells if the service is up or not.
-- Add following dependency to `build.gradle`:
+- We will use Spring Boot Actuator to expose a health check endpoint. This will later be used by AWS to verify that the service is running.
+- Add the following dependency to your `build.gradle:
 
 ```
     implementation 'org.springframework.boot:spring-boot-starter-actuator' 
 ```
 
-- Configure Actuator to expose health endpoint by adding following lines to the application.yaml:
+- Configure Actuator to expose the health endpoint by adding these lines to your `application.yaml:
 
 ```yaml
 management:
@@ -30,7 +35,13 @@ management:
         include: health
 ```
 
-- Now when you run the app you can check enpoint `http://localhost:8080/actuator/health`, you should get:
+- Start your application and open the endpoint in a browser or with curl:
+
+```
+http://localhost:8080/actuator/health
+```
+
+You should see a JSON response like this:
 
 ```json
 {
@@ -40,17 +51,16 @@ management:
 
 ### Spring Cloud AWS Secrets Manager
 
-- Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use *Spring Cloud AWS Secrets Manager* dependency
-- Add dependency to `build.gradle` (For some reason the version number is needed in this particular dependency. Check out the latest from [Maven Central](https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-secrets-manager)):
+- Since we will later host our database on AWS and store the credentials in AWS Secrets Manager, we can use the Spring Cloud AWS Secrets Manager dependency to load them automatically.
+- Add the dependency to `build.gradle` (For some reason the version number is needed in this particular dependency. Check out the latest from [Maven Central](https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-secrets-manager)):
 
 ```
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
 ```
 
-- Create a `application-aws.yaml` file.
-    - Now you should have two application.yaml files: `application.yaml` and `application-aws.yaml`.
-    - application.yaml is automatically used as *"default"* profile and application-aws is used as *"aws"* profile.
-- Next add following configuration to the `application-aws.yaml`:
+- Create a new configuration file named `application-aws.yaml`.
+- You should now have two application files: application.yaml (the default profile) and application-aws.yaml (the aws profile).
+- Add the following configuration to `application-aws.yaml`:
 
 ```yaml
 spring:
@@ -63,44 +73,47 @@ spring:
     url: jdbc:postgresql://${host}:${port}/${dbname}
 ```
 
-- ‼️Later we are going to create secret in the **AWS Secrets Manager** service and the secret name that we define there must be excatly same that is configured here (*"stories_db-secrets"*). If you want to give secret different name (e.g. your app name is not stories) write the secret name that you want to use. 
+- ⚠️ Important: Later, when creating the secret in AWS Secrets Manager, the secret name must exactly match what you configure here ('stories_db-secrets'). If you want to use a different name (for example, if your app isn’t called stories), update the name accordingly.
+
+
 
 ## AWS VPC
 
-- Go to **VPC** dashboard and select <button>Create VPC</button>:
+- Navigate to the **VPC** dashboard and select "Create VPC":
 
 ![img.png](cicd-guide-img/img3.png)
 
 ![img.png](cicd-guide-img/img4.png)
 
-- NAT-gateway is needed if your app needs to fetch external resources in the server (e.g. app calls external API, etc.) at runtime.
-  - In other words: docker container doesn't have access...    
-  - stories-app is simple app that doesn't call external resources on the so there is no need for NAT-gateway.
+#### NAT Gateway
 
-- ‼️If you are following [Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s): NAT-gateway is used. In this guide **VPC endpoint** is used instead of NAT-gateway.
+- [AWS docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html): *"You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services can't initiate a connection with those instances."*
+- Consider using a NAT Gateway if your application running in a private subnet needs to make outbound server-side connections to external services (for example, calling an external API).
+- Client-side requests, such as those from a browser (e.g., Google Fonts or other external APIs called from the frontend), do not require a NAT Gateway because they use the client’s network connection.
+- For stories-app, outbound server-side connections are not required, so a NAT Gateway is not selected here. Instead, VPC endpoints are later configured and used to provide private access to AWS services.
+
 
 ![img.png](cicd-guide-img/img5.png)
 
-#### Subnet names
+#### Subnet naming
 
-- I use "stories" prefix here because it is the name of the app.
-- Put region that you are using.
+- In this guide, subnets are named with the stories prefix, since the application is called stories. You can replace this prefix with your own application name to keep your resources organized.
+- Inlude the AWS region and availability zone in the name so it's easier to identify where each subnet is located.
 
-- **eu-north-1a** 
-  - stories-public-subnet1-eu-north-1a
-  - stories-app-subnet1-eu-north-1a
-  - stories-data-subnet1-eu-north-1a
+- Example naming convention:
+  - **eu-north-1a** 
+    - stories-public-subnet1-eu-north-1a
+    - stories-app-subnet1-eu-north-1a
+    - stories-data-subnet1-eu-north-1a
 
-- **eu-north-1b**
-  - stories-public-subnet2-eu-north-1b
-  - stories-app-subnet2-eu-north-1b
-  - stories-data-subnet2-eu-north-1b
+  - **eu-north-1b**
+    - stories-public-subnet2-eu-north-1b
+    - stories-app-subnet2-eu-north-1b
+    - stories-data-subnet2-eu-north-1b
 
 ![img.png](cicd-guide-img/img6.png)
 
-- Select "Create VPC"
 
-- ❗️When you create VPC **Elastic IP** is created. When you remove the VPC remember to release Elastic IP address. 
 
 
 ## AWS Security Group 
