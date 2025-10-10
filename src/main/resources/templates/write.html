@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Write your Story</title>
-    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}"/>
-</head>
+<th:block th:replace="~{fragments/head :: commonHead('Write you Story')}"></th:block>
 <body>
 <div class="container">
     <header class="header">
@@ -13,8 +8,8 @@
             <img class="logo" th:src="@{/logo.png}" alt="logo">
         </a>
         <nav class="header-nav">
-            <a th:href="@{/}">Home page</a>
-            <a th:href="@{/stories}">Read Stories</a>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/stories}">Read</a>
         </nav>
     </header>
 
@@ -42,9 +37,7 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <small>&copy; 2050 The Company. All rights reserved.</small>
-    </footer>
+    <th:block th:replace="~{fragments/footer :: commonFooter}"></th:block>
 </div>
 </body>
 </html>
