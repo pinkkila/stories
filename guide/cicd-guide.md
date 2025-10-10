@@ -40,8 +40,8 @@ management:
 
 ### Spring Cloud AWS Secrets Manager
 
-- Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use *Spring Cloud AWS Secrets Manager dependency*
-- Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager dependency. Check the latest from the Maven Central):
+- Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use *Spring Cloud AWS Secrets Manager* dependency
+- Add dependency to `build.gradle` (For some reason the version number is needed in this particular dependency. Check out the latest from [Maven Central](https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-secrets-manager)):
 
 ```
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
@@ -67,7 +67,7 @@ spring:
 
 ## AWS VPC
 
-- Go to **VPC** dashboard and select ==Create VPC==:
+- Go to **VPC** dashboard and select <button>Create VPC</button>:
 
 ![img.png](cicd-guide-img/img3.png)
 
@@ -77,7 +77,7 @@ spring:
   - In other words: docker container doesn't have access...    
   - stories-app is simple app that doesn't call external resources on the so there is no need for NAT-gateway.
 
-[//]: # (- ‼️If you are following [Deploy Applications on AWS Fargate &#40;ECS Tutorial + Hands-On Project&#41;]&#40;https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s&#41;: NAT-gateway is used atleast with the Lambda that rotates database secrets. In this guide **VPC endpoint** is used instead of NAT-gateway.)
+- ‼️If you are following [Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s): NAT-gateway is used. In this guide **VPC endpoint** is used instead of NAT-gateway.
 
 ![img.png](cicd-guide-img/img5.png)
 
