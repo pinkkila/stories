@@ -7,7 +7,7 @@ This is guide for implementing CI/CD to AWS Fargate with Spring Boot and databas
 
 - Before anything make sure that your app builds successfully on your local environment, run `./gradlew build`.
 
-### Actuator in Spring Boot app
+### Actuator
 
 - We use Actuator to expose endpoint that later tells if the service is up or not.
 - Add following dependency to **build.gradle**:
@@ -34,7 +34,7 @@ management:
 }
 ```
 
-### Spring Cloud AWS Secrets Manager in Spring Boot
+### Spring Cloud AWS Secrets Manager
 
 - Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use Spring Cloud AWS Secrets Manager dependency
 - Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager. Check the latest from Maven Central):

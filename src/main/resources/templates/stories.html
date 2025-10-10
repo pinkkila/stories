@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Stories</title>
-    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}"/>
-</head>
+<th:block th:replace="~{fragments/head :: commonHead('Stories')}"></th:block>
 <body>
 <div class="container">
     <header class="header">
@@ -13,8 +8,8 @@
             <img class="logo" th:src="@{/logo.png}" alt="logo">
         </a>
         <nav class="header-nav">
-            <a th:href="@{/}">Home page</a>
-            <a th:href="@{/write}">Write your Story</a>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/write}">Write</a>
         </nav>
     </header>
     <main>
@@ -31,7 +26,7 @@
             </th:block>
         </div>
     </main>
-
+    <th:block th:replace="~{fragments/footer :: commonFooter}"></th:block>
 </div>
 
 </body>
