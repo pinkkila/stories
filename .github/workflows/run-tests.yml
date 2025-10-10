@@ -1,4 +1,4 @@
-name: Run test and build
+name: Run tests or build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main", "dev" ]
 
 jobs:
-  build-run-tests:
+  run-tests-build:
     runs-on: ubuntu-latest
     permissions:
       contents: read

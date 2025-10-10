@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: eu-north-1                                      # set this to your preferred AWS region, e.g. us-west-1
+  AWS_REGION: eu-north-1                                      # set this to AWS region that you are using, e.g. eu-north-1
   ECR_REPOSITORY: stories                                     # set this to your Amazon ECR repository name
   ECS_SERVICE: stories-task-definition-service-kcj0t5mk       # set this to your Amazon ECS service name
   ECS_CLUSTER: stories-ecs-cluster                            # set this to your Amazon ECS cluster name
@@ -76,12 +76,6 @@ jobs:
         docker buildx build --platform linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-        echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-    - name: Debug show image
-      run: | 
-        echo "image: ${{ steps.build-image.outputs.image }}"
-
 
     - name: Download task definition
       run: |
