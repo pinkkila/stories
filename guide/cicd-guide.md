@@ -5,96 +5,49 @@ This is guide for implementing CI/CD to AWS Fargate with Spring Boot and databas
 
 ## Preparations
 
+- Before anything make sure that your app builds successfully on your local environment, run `./gradlew build`.
+
 ### Actuator in Spring Boot app
 
 - We use Actuator to expose endpoint that later tells if the service is up or not.
-- Add following dependency to `build.gradle`:
+- Add following dependency to **build.gradle**:
+
 ```
     implementation 'org.springframework.boot:spring-boot-starter-actuator' 
 ```
+
 - Configure Actuator to expose health endpoint by adding following lines to the application.yaml:
-```
+
+```yaml
 management:
   endpoints:
     web:
       exposure:
         include: health
 ```
+
 - Now when you run the app you can check enpoint `http://localhost:8080/actuator/health`, you should get:
+
 ```json
 {
   "status": "UP"
 }
 ```
 
-### Build with GitHub Actions
-
-- First make sure that your app builds successfully on your local environment, run `./gradlew build`.
-- Next in the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory. 
-- Add following lines to the `deploy.yml` (make sure that database and java-version values correspont to your own values):
-```yaml
-name: Deploy to AWS
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_PASSWORD: secret
-          POSTGRES_USER: myuser
-          POSTGRES_DB: stories_db
-        ports:
-          - '5432:5432'
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
-```
-
-- Now you can push the changes to the GitHub and the build should complete successfully. (Above we use `main` branch, but of course you can change it if you want).
-
-![img.png](cicd-guide-img/img1.png)
-
-- Build with Gradle Wrapper also runs tests (if test fails, the build fails):
-
-![img.png](cicd-guide-img/img2.png)
-
-
-### Spring Cloud AWS Secrets Manager in Spring Boot app
+### Spring Cloud AWS Secrets Manager in Spring Boot
 
 - Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use Spring Cloud AWS Secrets Manager dependency
 - Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager. Check the latest from Maven Central):
+
 ```
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
 ```
+
 - Create a `application-aws.yaml` file.
     - Now you should have two application.yaml files: `application.yaml` and `application-aws.yaml`.
     - application.yaml is automatically used as "default" profile and application-aws is used as "aws" profile.
 - Next add following configuration to the `application-aws.yaml`:
+
 ```yaml
 spring:
   config:
@@ -107,22 +60,6 @@ spring:
 ```
 
 - ‼️Later we are going to create secret in the AWS Secrets Manager service and the secret name that we define there must be excatly same that is configured here ("stories_db-secrets"). If you want to give secret different name (e.g. your app name is not stories) write the secret name that you want to use. 
-
-- Now when make a push to the GitHub the build fails:
-```
-        Caused by:
-        org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'secretsManagerClient' defined in class path resource [io/awspring/cloud/autoconfigure/config/secretsmanager/SecretsManagerAutoConfiguration.class]: Failed to instantiate [software.amazon.awssdk.services.secretsmanager.SecretsManagerClient]: Factory method 'secretsManagerClient' threw exception with message: Unable to load region from any of the providers in the chain software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain@1e295f7f: [software.amazon.awssdk.regions.providers.SystemSettingsRegionProvider@713497cd: Unable to load region from system settings. Region must be specified either via environment variable (AWS_REGION) or  system property (aws.region)., software.amazon.awssdk.regions.providers.AwsProfileRegionProvider@63318b56: No region provided in profile: default, software.amazon.awssdk.regions.providers.InstanceProfileRegionProvider@19e5e110: Unable to retrieve region information from EC2 Metadata service. Please make sure the application is running on EC2.]
-```
-
-- Like the log suggest, modify `deploy.yml` so that there is **AWS_REGION** as an evn parameter:
-
-```yaml
-    - name: Build with Gradle Wrapper
-      env:
-        AWS_REGION: eu-north-1
-      run: ./gradlew build
-```
-
 
 ## AWS VPC
 
@@ -525,6 +462,122 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 - In your GitHub reposiroty navigate to the "Settings" and select "Secrets and variables". Then click "New repository secret"
 
 ![img.png](cicd-guide-img/img92.png)
+
+
+## GitHub Actions
+
+- Next in the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory.
+- Add following lines to the `deploy.yml` 
+  - Set your *env* values and make sure that *database* and *java-version* values also correspont to your project values.
+  - In *step* "Build, tag, and push image to Amazon ECR" check the comment. 
+
+```yaml
+name: CI/CD Build & Deploy to ECS
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: eu-north-1                                      # set this to AWS region that you are using, e.g. eu-north-1
+  ECR_REPOSITORY: stories                                     # set this to your Amazon ECR repository name
+  ECS_SERVICE: stories-task-definition-service-kcj0t5mk       # set this to your Amazon ECS service name
+  ECS_CLUSTER: stories-ecs-cluster                            # set this to your Amazon ECS cluster name
+  CONTAINER_NAME: stories-container                           # set this to the name of the container in the
+                                                              # containerDefinitions section of your task definition
+  AWS_IAM_ROLE: github-oidc-provider-aws-stories              # set this to your AWS OICD provider role
+  ECS_TASK_DEFINITION_FAMILY: stories-task-definition         # set this to your Amazon ECS task definition family
+                                                              # (name that we gave to the task definition)
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    name: Build, test and deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_USER: myuser
+          POSTGRES_DB: stories_db
+        ports:
+          - '5432:5432'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+
+    - name: Run tests and build
+      env:
+        AWS_REGION: eu-north-1
+      run: ./gradlew build
+
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        audience: sts.amazonaws.com
+        aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_IAM_ROLE }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # If your ECS service runs on x86_64 instead of ARM, replace '--platform linux/arm64' with the default:
+        # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker buildx build --platform linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition \
+          --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
+          --query 'taskDefinition' > /tmp/app-task-definition.json
+
+    - name: Sanitize task definitioin
+      run: |
+        jq 'del(.taskDefinitionArn, .revision, .status, .registeredAt, .registeredBy)' \
+          /tmp/app-task-definition.json > /tmp/app-task-definition.sanitized.json
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def-app
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: /tmp/app-task-definition.sanitized.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+      with:
+        task-definition: ${{ steps.task-def-app.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+```
 
 
 
