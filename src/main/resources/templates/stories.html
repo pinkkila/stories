@@ -12,6 +12,7 @@
             <a th:href="@{/write}">Write</a>
         </nav>
     </header>
+
     <main>
         <div class="stories-container">
             <h1>Stories</h1>
@@ -19,15 +20,14 @@
             <th:block th:each="story : ${stories}">
                 <div class="story-card">
                     <h2 th:text="${story.storyTitle}"></h2>
-
-                        <p th:text="${story.storyText}"></p>
-
+                    <p th:text="${story.storyText}"></p>
                 </div>
             </th:block>
+
         </div>
     </main>
+
     <th:block th:replace="~{fragments/footer :: commonFooter}"></th:block>
 </div>
-
 </body>
 </html>
