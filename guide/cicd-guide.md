@@ -1,7 +1,11 @@
-# How to implement CI/CD with AWS 
+# How to implement... 
 
 [//]: # (Todo: Write better info)
-This is guide for implementing CI/CD to AWS Fargate with Spring Boot and database using GitHub actions.
+CI/CD pipeline 
+AWS Elastic Container Service (ECS).
+GitHub Actions
+Spring Boot
+
 
 ## Preparations
 
@@ -10,7 +14,7 @@ This is guide for implementing CI/CD to AWS Fargate with Spring Boot and databas
 ### Actuator
 
 - We use Actuator to expose endpoint that later tells if the service is up or not.
-- Add following dependency to **build.gradle**:
+- Add following dependency to `build.gradle`:
 
 ```
     implementation 'org.springframework.boot:spring-boot-starter-actuator' 
@@ -36,8 +40,8 @@ management:
 
 ### Spring Cloud AWS Secrets Manager
 
-- Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use Spring Cloud AWS Secrets Manager dependency
-- Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager. Check the latest from Maven Central):
+- Because we are later hosting database in AWS and use **AWS Secrets Manager** for storing and managing database credentials, we can use *Spring Cloud AWS Secrets Manager dependency*
+- Add dependency to `build.gradle` (For some reason the version number is needed in secrets-manager dependency. Check the latest from the Maven Central):
 
 ```
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
@@ -45,7 +49,7 @@ management:
 
 - Create a `application-aws.yaml` file.
     - Now you should have two application.yaml files: `application.yaml` and `application-aws.yaml`.
-    - application.yaml is automatically used as "default" profile and application-aws is used as "aws" profile.
+    - application.yaml is automatically used as *"default"* profile and application-aws is used as *"aws"* profile.
 - Next add following configuration to the `application-aws.yaml`:
 
 ```yaml
@@ -59,18 +63,19 @@ spring:
     url: jdbc:postgresql://${host}:${port}/${dbname}
 ```
 
-- ‼️Later we are going to create secret in the AWS Secrets Manager service and the secret name that we define there must be excatly same that is configured here ("stories_db-secrets"). If you want to give secret different name (e.g. your app name is not stories) write the secret name that you want to use. 
+- ‼️Later we are going to create secret in the **AWS Secrets Manager** service and the secret name that we define there must be excatly same that is configured here (*"stories_db-secrets"*). If you want to give secret different name (e.g. your app name is not stories) write the secret name that you want to use. 
 
 ## AWS VPC
 
-- Go to VPC dashboard and select Create VPC:
+- Go to **VPC** dashboard and select ==Create VPC==:
 
 ![img.png](cicd-guide-img/img3.png)
 
 ![img.png](cicd-guide-img/img4.png)
 
-- NAT-gateway is needed if your app needs to fetch external resources (Google Fonts, Stripe API, etc.) at runtime.
-  - stories-app is simple app that doesn't call external resources so there is no need for NAT-gateway.
+- NAT-gateway is needed if your app needs to fetch external resources in the server (e.g. app calls external API, etc.) at runtime.
+  - In other words: docker container doesn't have access...    
+  - stories-app is simple app that doesn't call external resources on the so there is no need for NAT-gateway.
 
 [//]: # (- ‼️If you are following [Deploy Applications on AWS Fargate &#40;ECS Tutorial + Hands-On Project&#41;]&#40;https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s&#41;: NAT-gateway is used atleast with the Lambda that rotates database secrets. In this guide **VPC endpoint** is used instead of NAT-gateway.)
 
