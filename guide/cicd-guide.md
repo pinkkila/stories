@@ -1,17 +1,16 @@
-# How to implement... 
+# Deployment on AWS ECS (Fargate) with GitHub Actions CI/CD
 
-[//]: # (Todo: Write better info)
-CI/CD pipeline 
-AWS Elastic Container Service (ECS).
-GitHub Actions
-Spring Boot
-IAAS Academy's YouTube video "Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)" is major source. 
+This guide walks through building a CI/CD pipeline for a containerized application using GitHub Actions and deploying it to AWS Elastic Container Service (ECS) with Fargate. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the guide is Spring Boot specific.
 
-The main reference for this guide is IAAS Academy’s YouTube video “Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”.
+In addition to the deployment pipeline, the guide includes integration with Amazon RDS for database hosting and AWS Secrets Manager for credential management, including automatic secret rotation using AWS Lambda. The pipeline uses GitHub’s OpenID Connect (OIDC) provider to enable authentication between GitHub Actions and AWS.
+
+The main reference for this guide is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
+
+Disclaimer: I’m a student, not an AWS professional. This guide is based on my own learning and experimentation.
 
 ## Preparations
 
-### Actuator
+### Spring Boot Actuator
 
 - We use Spring Boot Actuator to expose a health check endpoint. This will later be used by AWS to verify that the service is running.
 - Add the following dependency to your `build.gradle`:
@@ -409,7 +408,7 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 ![img_5.png](cicd-guide-img/img87.png)
 
 - Navigate in **IAM** service to the *Policies* section and select "Create policy"
-- Select "JSON" and copy and paste the following json:
+- Select "JSON" and copy and paste the following JSON:
 
 
 ```json
@@ -453,12 +452,12 @@ https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 }
 ```
 
-- Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster we made earlier and from the *Service* section copy your service's ARN and place that to the policy json:
+- Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster we made earlier and from the *Service* section copy your service's ARN and place that to the policy JSON:
 
 ![img_6.png](cicd-guide-img/img88.png)
 
-- Navigate to the Task definition we created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy json.
-- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn*. Earlier we configured the same policy for those so they are identical, and because of that, I have only placed one ARN to the policy json.
+- Navigate to the Task definition we created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
+- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn*. Since we previously configured the same policy for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON.
 
 ![img_7.png](cicd-guide-img/img89.png)
 
