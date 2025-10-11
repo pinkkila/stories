@@ -83,7 +83,7 @@ jobs:
           --task-definition "${{ env.ECS_TASK_DEFINITION_FAMILY }}" \
           --query 'taskDefinition' > /tmp/app-task-definition.json
 
-    - name: Sanitize task definitioin
+    - name: Sanitize task definition
       run: |
         jq 'del(.taskDefinitionArn, .revision, .status, .registeredAt, .registeredBy)' \
           /tmp/app-task-definition.json > /tmp/app-task-definition.sanitized.json
