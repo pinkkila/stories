@@ -1,8 +1,8 @@
 # Deployment on AWS ECS (Fargate) with GitHub Actions CI/CD
 
-This guide walks through building a CI/CD pipeline for a containerized application using GitHub Actions and deploying it to AWS Elastic Container Service (ECS) with Fargate. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the guide is Spring Boot specific.
+This guide walks through building a **CI/CD pipeline** for a containerized application using **GitHub Actions** and deploying it to **AWS Elastic Container Service (ECS)** with **Fargate**. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the guide is Spring Boot specific.
 
-In addition to the deployment pipeline, the guide includes integration with Amazon RDS for database hosting and AWS Secrets Manager for credential management, including automatic secret rotation using AWS Lambda. The pipeline uses GitHub’s OpenID Connect (OIDC) provider to enable authentication between GitHub Actions and AWS.
+In addition to the deployment pipeline, the guide includes integration with **Amazon RDS** for database hosting and **AWS Secrets Manager** for credential management, including automatic secret rotation using **AWS Lambda**. The pipeline uses **GitHub’s OpenID Connect (OIDC) provider** to enable authentication between GitHub Actions and AWS.
 
 The main reference for this guide is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
 
@@ -161,7 +161,7 @@ spring:
 
 - Then select "Create".
 
-- You’ll see a notification containing the master password. Copy it immediately. If you forget, you can reset it later by selecting your DB instance → Modify → "Set a new master password".
+- You’ll see a notification containing the master password. Copy it immediately. If you forget, you can reset the password by selecting your DB instance → Modify → "Set a new master password".
 
 
 ## AWS Secrets Manager, Secret rotation with Lambda, VPC endpoint
@@ -198,7 +198,9 @@ spring:
 ![img_13.png](cicd-guide-img/img26.png)
 
 
-- Navigate to **VPC** service, go to *Endpoints* and "Create endpoint"
+- Navigate to **VPC** service, go to *Endpoints* and "Create endpoint".
+
+https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
 ![img_13.png](cicd-guide-img/img27.png)
 
@@ -239,6 +241,8 @@ spring:
 ## VPC endpoints
 
 https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
+
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
 
 ![img_2.png](cicd-guide-img/img54.png)
 
