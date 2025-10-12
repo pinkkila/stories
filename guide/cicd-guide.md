@@ -270,8 +270,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ![img_12.png](cicd-guide-img/img66.png)
 
-- We also need to add *stories-vpc-endpoint-app-sg* to the *stories-vpc-endpoint-secrets-manager-sg* so navigate there and add select "Manage security groups":
-- Clarification: This is *stories-vpc-endpoint-secrets-manager-sg*:
+- We also need to add *stories-vpc-endpoint-app-sg* to the *stories-vpc-endpoint-secrets-manager* endpoint's security groups so navigate to that endpoint and add select "Manage security groups":
 
 ![img_13.png](cicd-guide-img/img67.png)
 
