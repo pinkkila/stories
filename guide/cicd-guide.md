@@ -6,7 +6,15 @@ In addition to the deployment pipeline, the guide includes integration with **Am
 
 The main reference for this guide is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
 
-Disclaimer: I’m a student, not an AWS professional. This guide is based on my own learning and experimentation.
+⚠️ Disclaimer: I’m a student, not an AWS professional. This guide is based on my own learning and experimentation.
+
+
+![img_4.png](img_4.png)
+
+Diagram references:<br>
+    - IAAS Academy, “Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”: https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s <br>
+    - AWS documentation: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
+
 
 ## Preparations
 
@@ -134,7 +142,7 @@ spring:
 
 ## AWS RDS
 
-- Navigate to **Aurora and RDS** service.
+- Navigate to **Aurora and RDS** dashboard.
 - First create a *DB Subnet group*. Select "Create DB subnet group"
 
 ![img.png](cicd-guide-img/img11.png)
@@ -198,7 +206,7 @@ spring:
 ![img.png](cicd-guide-img/img26.png)
 
 
-- Navigate to **VPC** service, go to *Endpoints* and "Create endpoint".
+- Navigate to **VPC** dashboard, go to *Endpoints* and "Create endpoint".
 
 https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
@@ -213,7 +221,7 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 ## Target Group
 
-- Navigate to **EC2** service and go to *Target Groups* and then select "Create target group"
+- Navigate to **EC2** dashboard and go to *Target Groups* and then select "Create target group"
 
 ![img.png](cicd-guide-img/img31.png)
 
@@ -226,7 +234,7 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 ## Application Load Balancer
 
-- In the **EC2** service, go to *Load Balancers*, select "Create load balancer", and then choose "Application Load Balancer".
+- In the **EC2** dashboard, go to *Load Balancers*, select "Create load balancer", and then choose "Application Load Balancer".
 
 ![img_3.png](cicd-guide-img/img34.png)
 
@@ -276,7 +284,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## IAM Roles & Policies
 
-- Navigate to **IAM** service and go to the *Policies* and select "Create policy".
+- Navigate to **IAM** dashboard and go to the *Policies* and select "Create policy".
 - Select "Secrets Manager" as a Service:
 
 ![img_6.png](cicd-guide-img/img37.png)
@@ -293,7 +301,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ![img_9.png](cicd-guide-img/img40.png)
 
-- In the **IAM** service go to *Roles* and select "Create role".
+- In the **IAM** dashboard go to *Roles* and select "Create role".
 
 ![img_10.png](cicd-guide-img/img41.png)
 
@@ -344,8 +352,8 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## Route 53 and Certificate Manager 
 
-- Next we need a domain and if you don't have one yet, just navigate to **Route53** service dashboard and go to "Register domain".
-- If you already have a domain or your registration is finished, navigate to **Certificate Manager** service and then select "Request":
+- Next we need a domain and if you don't have one yet, just navigate to **Route53** dashboard and go to "Register domain".
+- If you already have a domain or your registration is finished, navigate to **Certificate Manager** dashboard and then select "Request":
 
 ![img.png](cicd-guide-img/img68.png)
 
@@ -359,7 +367,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 - Wait and check that certificate is validated and issued.
 
-- Navigate to **EC2** service, then *Load Balancers* and select load balancer that we created earlier. Select "Add listener":
+- Navigate to **EC2** dashboard, then *Load Balancers* and select load balancer that we created earlier. Select "Add listener":
 
 ![img_4.png](cicd-guide-img/img72.png)
 
@@ -392,7 +400,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## OIDC provider
 
-- Navigate to the **IAM** service, then *Identity providers*, and select "Add provider" 
+- Navigate to the **IAM** dashboard, then *Identity providers*, and select "Add provider" 
 
 ![img.png](cicd-guide-img/img82.png)
 
@@ -408,7 +416,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ![img_5.png](cicd-guide-img/img87.png)
 
-- Navigate in **IAM** service to the *Policies* section and select "Create policy"
+- Navigate in **IAM** dashboard to the *Policies* section and select "Create policy"
 - Select "JSON" and copy and paste the following JSON:
 
 
