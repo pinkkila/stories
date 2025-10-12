@@ -113,7 +113,7 @@ spring:
 ## AWS Security Group 
 
 - In **VPC** dashboard, go to *Security groups* and select "Create security group" 
-- Create following security groups:
+- Create following *Security groups*:
 
 ![img.png](cicd-guide-img/img7.png)
 
@@ -166,7 +166,7 @@ spring:
 
 ## AWS Secrets Manager, Secret rotation with Lambda, VPC endpoint
 
-- Create the following *Security group*
+- Create the following *Security group*:
 
 ![img.png](cicd-guide-img/img18.png)
 
@@ -174,7 +174,7 @@ spring:
 
 ![img_1.png](cicd-guide-img/img19.png)
 
-- Navigate to the **AWS Secrets Manager** service and select "Store a new secret"
+- Navigate to the **AWS Secrets Manager** dashboard and select "Store a new secret"
 
 ![img_2.png](cicd-guide-img/img20.png)
 
@@ -188,14 +188,14 @@ spring:
 
 ![img_6.png](cicd-guide-img/img24.png)
 
-- Navigate to the **Lambda** service and select the created Lambda function. 
-- Then select "Configuration" and from there select "VPC" and then "Edit" and change *Security group* for "stories-lambda-db-access-sg"
+- Navigate to the **Lambda** dashboard and select the created Lambda function. 
+- Then select "Configuration" and from there select "VPC" and then "Edit" and change *Security group* for "stories-lambda-sg"
 
-![img_7.png](cicd-guide-img/img25.png)
+![img.png](cicd-guide-img/img25.png)
 
 - Next create following *Security group*:
 
-![img_13.png](cicd-guide-img/img26.png)
+![img.png](cicd-guide-img/img26.png)
 
 
 - Navigate to **VPC** service, go to *Endpoints* and "Create endpoint".
@@ -206,8 +206,7 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 ![img_14.png](cicd-guide-img/img28.png)
 
-![img_15.png](cicd-guide-img/img29.png)
-
+![img.png](cicd-guide-img/img29.png)
 
 - After the endpoint is created, you can test the secret rotation in **Secrets Manger** under *Rotation* -> "Rotate secrets immediately".
 
@@ -272,8 +271,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 - We also need to add *stories-vpc-endpoint-app-sg* to the *stories-vpc-endpoint-secrets-manager* endpoint's security groups so navigate to that endpoint and add select "Manage security groups":
 
-![img_13.png](cicd-guide-img/img67.png)
-
+![img.png](cicd-guide-img/img67.png)
 
 
 ## IAM Roles & Policies
