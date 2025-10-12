@@ -9,6 +9,8 @@ The main reference for this guide is **IAAS Academy’s** YouTube video *[“Dep
 ⚠️ Disclaimer: I’m a student, not an AWS professional. This guide is based on my own learning and experimentation.
 
 
+## Diagram 
+
 ![img_4.png](img_4.png)
 
 Diagram references:<br>

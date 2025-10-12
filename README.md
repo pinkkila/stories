@@ -4,7 +4,7 @@ Purposose of this project is to implement CI/CD pipeline and document the porses
 
 ## Example app
 
-The project uses simple Spring Boot MVC app with data persistence of PostgreSQL.
+The project uses simple Spring Boot MVC app with PostgreSQL for data persistence.
 
 ## Guide 
 
@@ -12,6 +12,6 @@ The project uses simple Spring Boot MVC app with data persistence of PostgreSQL.
 
 In addition to the deployment pipeline, the guide includes integration with Amazon RDS for database hosting and AWS Secrets Manager for credential management, including automatic secret rotation using AWS Lambda. The pipeline uses GitHub’s OpenID Connect (OIDC) provider to enable authentication between GitHub Actions and AWS.
 
-## AWS services used 
+## Diagram
 
-- 
+![img_4.png](guide/img_4.png)
