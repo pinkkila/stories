@@ -10,8 +10,7 @@ In addition to the deployment pipeline, the document includes integration with *
 
 Section reference: [^1], [^2].
 
-![img_4.png](img_4.png)
-
+![img_1.png](cicd-img/diagram.png)
 
 ## Preparations
 
