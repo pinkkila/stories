@@ -15,8 +15,8 @@ The main reference for this document is **IAAS Academy’s** YouTube video *[“
 ![img_4.png](img_4.png)
 
 Diagram references:<br>
-    - IAAS Academy: Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s <br>
-    - AWS documentation: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
+    - IAAS Academy: [Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s) <br>
+    - AWS documentation: [Best practices for connecting Amazon ECS to AWS services from inside your VPC](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html)
 
 
 ## Preparations
@@ -82,7 +82,7 @@ spring:
 
 
 
-## AWS VPC
+## AWS VPC [^1]
 
 - Navigate to the **VPC** dashboard and select "Create VPC":
 
@@ -665,6 +665,12 @@ jobs:
           AWS_REGION: eu-north-1
         run: ./gradlew build
 ```
+
+### References
+
+[^1] IAAS Academy. Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s
+
+[^2] AWS documentation. Best practices for connecting Amazon ECS to AWS services from inside your VPC: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
 
 
 
