@@ -6,13 +6,11 @@ In addition to the deployment pipeline, the document includes integration with *
 
 ⚠️ Disclaimer: I’m a student, not an AWS professional. This document is based on my own learning and experimentation.
 
-## Diagram (better name)
+### AWS Architecture Diagram
+
+Section reference: [^1], [^2].
 
 ![img_4.png](img_4.png)
-
-Diagram references:<br>
-    - IAAS Academy: [Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s) <br>
-    - AWS documentation: [Best practices for connecting Amazon ECS to AWS services from inside your VPC](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html)
 
 
 ## Preparations
@@ -90,7 +88,7 @@ Section reference: [^1]
 
 #### NAT gateway
 
-- [AWS docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html): *"You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services can't initiate a connection with those instances."* [^3] 
+- [AWS docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html): *"You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services can't initiate a connection with those instances."* [^3]. 
 - Consider using a NAT Gateway if your application running in a private subnet needs to make outbound server-side connections to external services (for example, calling an external API).
 - Client-side requests, such as those from a browser (e.g., Google Fonts or other external APIs called from the frontend), do not require a NAT Gateway because they use the client’s network connection.
 - For stories-app, outbound server-side connections are not required, so a NAT Gateway is not selected here. Instead, VPC endpoints are later configured and used to provide private access to AWS services.
@@ -121,7 +119,7 @@ Section reference: [^1]
 
 ## AWS Security Group 
 
-Section reference: [^1]
+Section reference: [^1].
 
 - In **VPC** dashboard, go to *Security groups* and select "Create security group" 
 - Create following *Security groups*:
@@ -135,7 +133,7 @@ Section reference: [^1]
 
 ## AWS ECR
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Go to **Elastic Container Registry** and select "Create"
 
@@ -147,7 +145,7 @@ Section reference: [^1]
 
 ## AWS RDS
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Navigate to **Aurora and RDS** dashboard.
 - First create a *DB Subnet group*. Select "Create DB subnet group"
@@ -227,7 +225,7 @@ Section reference: [^1].
 
 ## Target Group
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Navigate to **EC2** dashboard and go to *Target Groups* and then select "Create target group"
 
@@ -242,7 +240,7 @@ Section reference: [^1]
 
 ## Application Load Balancer
 
-Section reference: [^1]
+Section reference: [^1].
 
 - In the **EC2** dashboard, go to *Load Balancers*, select "Create load balancer", and then choose "Application Load Balancer".
 
@@ -292,7 +290,7 @@ Section references: [^5], [^2].
 
 ## IAM Roles & Policies
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Navigate to **IAM** dashboard and go to the *Policies* and select "Create policy".
 - Select "Secrets Manager" as a Service:
@@ -325,7 +323,7 @@ Section reference: [^1]
 
 ## ECS Cluster
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Navigate to **Elastic Container Service**, go to *Clusters* and select "Create cluster".
 
@@ -334,7 +332,7 @@ Section reference: [^1]
 
 ## ECS Task definition
 
-Section reference: [^1]
+Section reference: [^1].
 
 - In **Elastic Container Service** go to *Task definition* and select "Create new task definition".
 
@@ -349,7 +347,7 @@ Section reference: [^1]
 
 ## ECS Service
 
-Section reference: [^1]
+Section reference: [^1].
 
 - Navigate to the cluster created earlier and there in the *Services* section select "Create".
 
