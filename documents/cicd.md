@@ -82,9 +82,9 @@ Section reference: [^1]
 
 - Navigate to the **VPC** dashboard and select "Create VPC":
 
-![img.png](cicd-guide-img/img3.png)
+![img.png](cicd-img/img3.png)
 
-![img.png](cicd-guide-img/img4.png)
+![img.png](cicd-img/img4.png)
 
 #### NAT gateway
 
@@ -94,7 +94,7 @@ Section reference: [^1]
 - For stories-app, outbound server-side connections are not required, so a NAT Gateway is not selected here. Instead, VPC endpoints are later configured and used to provide private access to AWS services.
 
 
-![img.png](cicd-guide-img/img5.png)
+![img.png](cicd-img/img5.png)
 
 #### Subnet naming
 
@@ -112,7 +112,7 @@ Section reference: [^1]
     - stories-app-subnet2-eu-north-1b
     - stories-data-subnet2-eu-north-1b
 
-![img.png](cicd-guide-img/img6.png)
+![img.png](cicd-img/img6.png)
 
 
 
@@ -124,11 +124,11 @@ Section reference: [^1].
 - In **VPC** dashboard, go to *Security groups* and select "Create security group" 
 - Create following *Security groups*:
 
-![img.png](cicd-guide-img/img7.png)
+![img.png](cicd-img/img7.png)
 
-![img_1.png](cicd-guide-img/img8.png)
+![img_1.png](cicd-img/img8.png)
 
-![img.png](cicd-guide-img/img9.png)
+![img.png](cicd-img/img9.png)
 
 
 ## AWS ECR
@@ -137,7 +137,7 @@ Section reference: [^1].
 
 - Go to **Elastic Container Registry** and select "Create"
 
-![img.png](cicd-guide-img/img10.png)
+![img.png](cicd-img/img10.png)
 
 - After the repository is created, go to the repository and select "View push commands"
 - Follow those commands to push your image to the repository. (Remember to build your Spring Boot app with the latest changes before pushing: `./gradlew build`)
@@ -150,27 +150,27 @@ Section reference: [^1].
 - Navigate to **Aurora and RDS** dashboard.
 - First create a *DB Subnet group*. Select "Create DB subnet group"
 
-![img.png](cicd-guide-img/img11.png)
+![img.png](cicd-img/img11.png)
 
 - Go to *Databases* in **RDS** dashboard and select "Create database"
 
-![img_1.png](cicd-guide-img/img12.png)
+![img_1.png](cicd-img/img12.png)
 
 - Secrets Manager will be configured later.
 
-![img_2.png](cicd-guide-img/img13.png)
+![img_2.png](cicd-img/img13.png)
 
-![img_3.png](cicd-guide-img/img14.png)
+![img_3.png](cicd-img/img14.png)
 
 - Ensure the port (default 5432 for PostgreSQL) is correct in the *Additional configuration* section (not open in the screenshot).
 
-![img_4.png](cicd-guide-img/img15.png)
+![img_4.png](cicd-img/img15.png)
 
-![img_5.png](cicd-guide-img/img16.png)
+![img_5.png](cicd-img/img16.png)
 
 - In "Additional configuration" add "Initial database name".
 
-![img_6.png](cicd-guide-img/img17.png)
+![img_6.png](cicd-img/img17.png)
 
 - Then select "Create".
 
@@ -183,42 +183,42 @@ Section reference: [^1].
 
 - Create the following *Security group*:
 
-![img.png](cicd-guide-img/img18.png)
+![img.png](cicd-img/img18.png)
 
 - And then edit *stories-data-sg* security group by adding following inbound rule:
 
-![img_1.png](cicd-guide-img/img19.png)
+![img_1.png](cicd-img/img19.png)
 
 - Navigate to the **AWS Secrets Manager** dashboard and select "Store a new secret"
 
-![img_2.png](cicd-guide-img/img20.png)
+![img_2.png](cicd-img/img20.png)
 
 - ‼️ Make sure that "Secret name" matches exatly the one which is configured in the `application-aws.yaml`
 
-![img_3.png](cicd-guide-img/img21.png)
+![img_3.png](cicd-img/img21.png)
 
-![img_4.png](cicd-guide-img/img22.png)
+![img_4.png](cicd-img/img22.png)
 
-![img_5.png](cicd-guide-img/img23.png)
+![img_5.png](cicd-img/img23.png)
 
-![img_6.png](cicd-guide-img/img24.png)
+![img_6.png](cicd-img/img24.png)
 
 - Navigate to the **Lambda** dashboard and select the created Lambda function. 
 - Then select "Configuration" and from there select "VPC" and then "Edit" and change *Security group* for "stories-lambda-sg"
 
-![img.png](cicd-guide-img/img25.png)
+![img.png](cicd-img/img25.png)
 
 - Next create following *Security group* (rest of this section uses reference [^4]):
 
-![img.png](cicd-guide-img/img26.png)
+![img.png](cicd-img/img26.png)
 
 - Navigate to **VPC** dashboard, go to *Endpoints* and "Create endpoint".
 
-![img_13.png](cicd-guide-img/img27.png)
+![img_13.png](cicd-img/img27.png)
 
-![img_14.png](cicd-guide-img/img28.png)
+![img_14.png](cicd-img/img28.png)
 
-![img.png](cicd-guide-img/img29.png)
+![img.png](cicd-img/img29.png)
 
 - After the endpoint is created, you can test the secret rotation in **Secrets Manger** under *Rotation* -> "Rotate secrets immediately".
 
@@ -229,13 +229,13 @@ Section reference: [^1].
 
 - Navigate to **EC2** dashboard and go to *Target Groups* and then select "Create target group"
 
-![img.png](cicd-guide-img/img31.png)
+![img.png](cicd-img/img31.png)
 
-![img_1.png](cicd-guide-img/img32.png)
+![img_1.png](cicd-img/img32.png)
 
 - Remove manually entered IP addresses before continuing.
 
-![img_2.png](cicd-guide-img/img33.png)
+![img_2.png](cicd-img/img33.png)
 
 
 ## Application Load Balancer
@@ -244,48 +244,48 @@ Section reference: [^1].
 
 - In the **EC2** dashboard, go to *Load Balancers*, select "Create load balancer", and then choose "Application Load Balancer".
 
-![img_3.png](cicd-guide-img/img34.png)
+![img_3.png](cicd-img/img34.png)
 
-![img_4.png](cicd-guide-img/img35.png)
+![img_4.png](cicd-img/img35.png)
 
 - After reviewing the summary, select "Create load balancer".
 
-![img_5.png](cicd-guide-img/img36.png)
+![img_5.png](cicd-img/img36.png)
 
 
 ## VPC endpoints
 
 Section references: [^5], [^2].
 
-![img_2.png](cicd-guide-img/img54.png)
+![img_2.png](cicd-img/img54.png)
 
-![img.png](cicd-guide-img/img55.png)
+![img.png](cicd-img/img55.png)
 
-![img_6.png](cicd-guide-img/img56.png)
+![img_6.png](cicd-img/img56.png)
 
-![img_3.png](cicd-guide-img/img57.png)
+![img_3.png](cicd-img/img57.png)
 
-![img_4.png](cicd-guide-img/img58.png)
+![img_4.png](cicd-img/img58.png)
 
-![img_5.png](cicd-guide-img/img59.png)
+![img_5.png](cicd-img/img59.png)
 
-![img_6.png](cicd-guide-img/img60.png)
+![img_6.png](cicd-img/img60.png)
 
-![img_7.png](cicd-guide-img/img61.png)
+![img_7.png](cicd-img/img61.png)
 
-![img_8.png](cicd-guide-img/img62.png)
+![img_8.png](cicd-img/img62.png)
 
-![img_9.png](cicd-guide-img/img63.png)
+![img_9.png](cicd-img/img63.png)
 
-![img_10.png](cicd-guide-img/img64.png)
+![img_10.png](cicd-img/img64.png)
 
-![img_11.png](cicd-guide-img/img65.png)
+![img_11.png](cicd-img/img65.png)
 
-![img_12.png](cicd-guide-img/img66.png)
+![img_12.png](cicd-img/img66.png)
 
 - The *stories-vpc-endpoint-app-sg* must also be added to the *stories-vpc-endpoint-secrets-manager* endpoint’s security groups, so navigate to that endpoint and select "Manage security groups":
 
-![img.png](cicd-guide-img/img67.png)
+![img.png](cicd-img/img67.png)
 
 
 ## IAM Roles & Policies
@@ -295,30 +295,30 @@ Section reference: [^1].
 - Navigate to **IAM** dashboard and go to the *Policies* and select "Create policy".
 - Select "Secrets Manager" as a Service:
 
-![img_6.png](cicd-guide-img/img37.png)
+![img_6.png](cicd-img/img37.png)
 
 - From the list check "GetSecretValue":
 - If you manage secrets in your app differently than described in this guide, you may also need to add *"secretsmanager:DescribeSecret"* [^4].
 
-![img_7.png](cicd-guide-img/img38.png)
+![img_7.png](cicd-img/img38.png)
 
 - Open another tab, navigate to **Secrets Manager**, select the secret you created earlier, and copy its *Secret ARN*.
 - Go back to the policy creation page and select "Add ARNs".
 - Paste copied ARN (when you paste ARN other fields will be filled automatically) and then select "Add ARNs". After that select "Next".
 
-![img_8.png](cicd-guide-img/img39.png)
+![img_8.png](cicd-img/img39.png)
 
-![img_9.png](cicd-guide-img/img40.png)
+![img_9.png](cicd-img/img40.png)
 
 - In the **IAM** dashboard go to *Roles* and select "Create role".
 
-![img_10.png](cicd-guide-img/img41.png)
+![img_10.png](cicd-img/img41.png)
 
-![img_11.png](cicd-guide-img/img42.png)
+![img_11.png](cicd-img/img42.png)
 
-![img_12.png](cicd-guide-img/img43.png)
+![img_12.png](cicd-img/img43.png)
 
-![img_13.png](cicd-guide-img/img44.png)
+![img_13.png](cicd-img/img44.png)
 
 
 ## ECS Cluster
@@ -327,7 +327,7 @@ Section reference: [^1].
 
 - Navigate to **Elastic Container Service**, go to *Clusters* and select "Create cluster".
 
-![img.png](cicd-guide-img/img45.png)
+![img.png](cicd-img/img45.png)
 
 
 ## ECS Task definition
@@ -338,11 +338,11 @@ Section reference: [^1].
 
 - ❗️ Select for "Operating system/Architecture" "Linux/ARM64" if you used ARM64 for building image (e.g. Mac with M-series chip).
 
-![img_1.png](cicd-guide-img/img46.png)
+![img_1.png](cicd-img/img46.png)
 
-![img_2.png](cicd-guide-img/img47.png)
+![img_2.png](cicd-img/img47.png)
 
-![img_3.png](cicd-guide-img/img48.png)
+![img_3.png](cicd-img/img48.png)
 
 
 ## ECS Service
@@ -351,15 +351,15 @@ Section reference: [^1].
 
 - Navigate to the cluster created earlier and there in the *Services* section select "Create".
 
-![img_4.png](cicd-guide-img/img49.png)
+![img_4.png](cicd-img/img49.png)
 
-![img_5.png](cicd-guide-img/img50.png)
+![img_5.png](cicd-img/img50.png)
 
-![img_6.png](cicd-guide-img/img51.png)
+![img_6.png](cicd-img/img51.png)
 
-![img_7.png](cicd-guide-img/img52.png)
+![img_7.png](cicd-img/img52.png)
 
-![img_8.png](cicd-guide-img/img53.png)
+![img_8.png](cicd-img/img53.png)
 
 - When you press "Create" the deployment will start.
 - When deployment is finished, navigate to the **EC2** service and *Load Balancers* and select load balancer created earlier and copy "DNS name" and paste the address to the browser and make sure that your app is running.
@@ -372,47 +372,47 @@ Section reference: [^6], [^7].
 - For next step a domain is needed and if you don't have one yet, just navigate to **Route53** dashboard and go to "Register domain".
 - If you already have a domain or your registration is finished, navigate to **Certificate Manager** dashboard and then select "Request":
 
-![img.png](cicd-guide-img/img68.png)
+![img.png](cicd-img/img68.png)
 
-![img_1.png](cicd-guide-img/img69.png)
+![img_1.png](cicd-img/img69.png)
 
 - Next you need to select "Create records in Route 53". 
 
-![img_2.png](cicd-guide-img/img70.png)
+![img_2.png](cicd-img/img70.png)
 
-![img_3.png](cicd-guide-img/img71.png)
+![img_3.png](cicd-img/img71.png)
 
 - Wait and check that certificate is validated and issued.
 
 - Navigate to **EC2** dashboard, then *Load Balancers* and select load balancer that was created earlier. Select "Add listener":
 
-![img_4.png](cicd-guide-img/img72.png)
+![img_4.png](cicd-img/img72.png)
 
-![img_5.png](cicd-guide-img/img73.png)
+![img_5.png](cicd-img/img73.png)
 
-![img_6.png](cicd-guide-img/img74.png)
+![img_6.png](cicd-img/img74.png)
 
 - Navigate *Security groups* and modify alb-sg by adding the https 443:
 
-![img_7.png](cicd-guide-img/img75.png)
+![img_7.png](cicd-img/img75.png)
 
 - Back to the load balancer and on *HTTP:80* select "Edit listener" 
 
-![img_8.png](cicd-guide-img/img76.png)
+![img_8.png](cicd-img/img76.png)
 
-![img_9.png](cicd-guide-img/img77.png)
+![img_9.png](cicd-img/img77.png)
 
 - Back to **Route 53** and in your *Hosted zone details*  select "Create record"
 
-![img_10.png](cicd-guide-img/img78.png)
+![img_10.png](cicd-img/img78.png)
 
-![img_11.png](cicd-guide-img/img79.png)
+![img_11.png](cicd-img/img79.png)
 
 - It might take few a minutes but now your app should be available in both your-domain.com and www&#46;your-domain.com
 
-![img_12.png](cicd-guide-img/img80.png)
+![img_12.png](cicd-img/img80.png)
 
-![img_14.png](cicd-guide-img/img81.png)
+![img_14.png](cicd-img/img81.png)
 
 
 ## OIDC provider
@@ -421,19 +421,19 @@ Section reference: [^8].
 
 - Navigate to the **IAM** dashboard, then *Identity providers*, and select "Add provider" 
 
-![img.png](cicd-guide-img/img82.png)
+![img.png](cicd-img/img82.png)
 
 - Go to the created Identity provider and select "Assign role"
 
-![img_1.png](cicd-guide-img/img83.png)
+![img_1.png](cicd-img/img83.png)
 
-![img_2.png](cicd-guide-img/img84.png)
+![img_2.png](cicd-img/img84.png)
 
-![img_3.png](cicd-guide-img/img85.png)
+![img_3.png](cicd-img/img85.png)
 
-![img_4.png](cicd-guide-img/img86.png)
+![img_4.png](cicd-img/img86.png)
 
-![img_5.png](cicd-guide-img/img87.png)
+![img_5.png](cicd-img/img87.png)
 
 - Navigate in **IAM** dashboard to the *Policies* section and select "Create policy"
 - Select "JSON" and copy and paste the following JSON:
@@ -482,25 +482,25 @@ Section reference: [^8].
 
 - Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster made earlier and from the *Service* section copy your service's ARN and place that to the policy JSON:
 
-![img_6.png](cicd-guide-img/img88.png)
+![img_6.png](cicd-img/img88.png)
 
 - Navigate to the Task definition created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
 - ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn* [^9]. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON. 
 
-![img_7.png](cicd-guide-img/img89.png)
+![img_7.png](cicd-img/img89.png)
 
-![img_8.png](cicd-guide-img/img90.png)
+![img_8.png](cicd-img/img90.png)
 
 - Go back to the *Roles* and go to the role that was created earlier and select "Add permission" and "Attach policies"
 
-![img_9.png](cicd-guide-img/img91.png)
+![img_9.png](cicd-img/img91.png)
 
 
 ## GitHub Secrets
 
 - In your GitHub repository navigate to the *Settings* and select *Secrets and variables*. Then click "New repository secret"
 
-![img.png](cicd-guide-img/img92.png)
+![img.png](cicd-img/img92.png)
 
 
 ## GitHub Actions
