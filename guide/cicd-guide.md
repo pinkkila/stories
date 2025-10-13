@@ -135,6 +135,8 @@ Section reference: [^1]
 
 ## AWS ECR
 
+Section reference: [^1]
+
 - Go to **Elastic Container Registry** and select "Create"
 
 ![img.png](cicd-guide-img/img10.png)
@@ -367,6 +369,8 @@ Section reference: [^1]
 
 ## Route 53 and Certificate Manager 
 
+Section reference: [^6], [^7].
+
 - For next step a domain is needed and if you don't have one yet, just navigate to **Route53** dashboard and go to "Register domain".
 - If you already have a domain or your registration is finished, navigate to **Certificate Manager** dashboard and then select "Request":
 
@@ -415,7 +419,7 @@ Section reference: [^1]
 
 ## OIDC provider
 
-Section reference: [^6].
+Section reference: [^8].
 
 - Navigate to the **IAM** dashboard, then *Identity providers*, and select "Add provider" 
 
@@ -483,7 +487,7 @@ Section reference: [^6].
 ![img_6.png](cicd-guide-img/img88.png)
 
 - Navigate to the Task definition created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
-- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn* [^7]. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON. 
+- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn* [^9]. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON. 
 
 ![img_7.png](cicd-guide-img/img89.png)
 
@@ -503,7 +507,7 @@ Section reference: [^6].
 
 ## GitHub Actions
 
-Section reference: [^6], [^7], [^8].
+Section reference: [^8], [^9], [^10].
 
 - Next in the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory.
 - Add following lines to the `deploy.yml` 
@@ -692,11 +696,16 @@ jobs:
 
 [^5]: AWS documentation. Amazon ECR interface VPC endpoints (AWS PrivateLink): https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 
-[^6]: AWS Community Day. Peter Sankauskas - CI/CD: GitHub Actions to ECS: https://www.youtube.com/watch?v=kHYZX3-EQaw
+[^6]: Tiny Technical Tutorials. Amazon Route 53 Basics Tutorial | Domain Registration, A Records, CNAME Records, Aliases, Subdomains: https://www.youtube.com/watch?v=JRZiQFVWpi8
 
-[^7]: aws-actions. Amazon ECS "Deploy Task Definition" Action for GitHub Actions README: https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file
+[^7]: AWS documentation. Create an HTTPS listener for your Application Load Balancer: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html 
 
-[^8]: sajosam. GitHub Actions to AWS ECS: Build, Push, and Deploy Docker Images Easily: https://medium.com/@sajo02/github-actions-to-aws-ecs-build-push-and-deploy-docker-images-easily-7d4e8ab3efb6
+[^8]: AWS Community Day. Peter Sankauskas - CI/CD: GitHub Actions to ECS: https://www.youtube.com/watch?v=kHYZX3-EQaw
+
+[^9]: aws-actions. Amazon ECS "Deploy Task Definition" Action for GitHub Actions README: https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file
+
+[^10]: sajosam. GitHub Actions to AWS ECS: Build, Push, and Deploy Docker Images Easily: https://medium.com/@sajo02/github-actions-to-aws-ecs-build-push-and-deploy-docker-images-easily-7d4e8ab3efb6
+
 
 
 
