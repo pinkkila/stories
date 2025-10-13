@@ -1,20 +1,21 @@
 # Deployment on AWS ECS (Fargate) with GitHub Actions CI/CD
 
-This guide walks through building a **CI/CD pipeline** for a containerized application using **GitHub Actions** and deploying it to **AWS Elastic Container Service (ECS)** with **Fargate**. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the guide is Spring Boot specific.
+This document walks through building a **CI/CD pipeline** for a containerized application using **GitHub Actions** and deploying it to **AWS Elastic Container Service (ECS)** with **Fargate**. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the document is Spring Boot specific.
 
-In addition to the deployment pipeline, the guide includes integration with **Amazon RDS** for database hosting and **AWS Secrets Manager** for credential management, including automatic secret rotation using **AWS Lambda**. The pipeline uses **GitHub’s OpenID Connect (OIDC) provider** to enable authentication between GitHub Actions and AWS.
+In addition to the deployment pipeline, the document includes integration with **Amazon RDS** for database hosting and **AWS Secrets Manager** for credential management, including automatic secret rotation using **AWS Lambda**. The pipeline uses **GitHub’s OpenID Connect (OIDC) provider** to enable authentication between GitHub Actions and AWS.
 
-The main reference for this guide is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
+⚠️ Disclaimer: I’m a student, not an AWS professional. This document is based on my own learning and experimentation.
 
-⚠️ Disclaimer: I’m a student, not an AWS professional. This guide is based on my own learning and experimentation.
+## References and resources
 
+The main reference for this document is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
 
-## Diagram 
+## Diagram (better name)
 
 ![img_4.png](img_4.png)
 
 Diagram references:<br>
-    - IAAS Academy, “Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”: https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s <br>
+    - IAAS Academy: Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s <br>
     - AWS documentation: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
 
 
@@ -22,7 +23,7 @@ Diagram references:<br>
 
 ### Spring Boot Actuator
 
-- We use Spring Boot Actuator to expose a health check endpoint. This will later be used by AWS to verify that the service is running.
+- Spring Boot Actuator can be used to expose a health check endpoint. This will later be used by AWS to verify that the service is running.
 - Add the following dependency to your `build.gradle`:
 
 ```
@@ -55,8 +56,8 @@ You should see a JSON response like this:
 
 ### Spring Cloud AWS Secrets Manager
 
-- Since we will later host our database on AWS and store the credentials in AWS Secrets Manager, we can use the Spring Cloud AWS Secrets Manager dependency to load them automatically.
-- Add the dependency to `build.gradle` (For some reason the version number is needed in this particular dependency. Check out the latest from [Maven Central](https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-secrets-manager)):
+- Since the database will later be hosted on AWS and its credentials stored in AWS Secrets Manager, the Spring Cloud AWS Secrets Manager dependency provides integration for accessing those credentials.
+- Add the dependency to `build.gradle` (For some reason the version number is needed in this particular dependency. Check out the latest version from [Maven Central](https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter-secrets-manager)):
 
 ```
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.4.0'
@@ -101,7 +102,7 @@ spring:
 
 #### Subnet naming
 
-- In this guide, subnets are named with the 'stories' prefix, since the application is called *stories*. You can replace this prefix with your own application name to keep your resources organized.
+- In this document, subnets are named with the 'stories' prefix, since the example application is called *stories*. You can replace this prefix with your own application name to keep your resources organized.
 - Include the AWS region and Availability Zone in the name to make it easier to identify where each subnet is located.
 
 - Example naming convention:
@@ -149,11 +150,11 @@ spring:
 
 ![img.png](cicd-guide-img/img11.png)
 
-- Next we create Database. Go to *Databases* in **RDS** and select "Create database"
+- Go to *Databases* in **RDS** dashboard and select "Create database"
 
 ![img_1.png](cicd-guide-img/img12.png)
 
-- We will configure Secrets Manager later.
+- Secrets Manager will be configured later.
 
 ![img_2.png](cicd-guide-img/img13.png)
 
@@ -279,7 +280,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ![img_12.png](cicd-guide-img/img66.png)
 
-- We also need to add *stories-vpc-endpoint-app-sg* to the *stories-vpc-endpoint-secrets-manager* endpoint's security groups so navigate to that endpoint and add select "Manage security groups":
+- The *stories-vpc-endpoint-app-sg* must also be added to the *stories-vpc-endpoint-secrets-manager* endpoint’s security groups, so navigate to that endpoint and select "Manage security groups":
 
 ![img.png](cicd-guide-img/img67.png)
 
@@ -292,6 +293,8 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 ![img_6.png](cicd-guide-img/img37.png)
 
 - From the list check "GetSecretValue":
+- If you manage secrets in your app differently than described in this guide, you may also need to add *"secretsmanager:DescribeSecret"*. 
+  - https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
 ![img_7.png](cicd-guide-img/img38.png)
 
@@ -336,7 +339,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## ECS Service
 
-- Navigate to the cluster we created earlier and there in the *Services* section select "Create".
+- Navigate to the cluster created earlier and there in the *Services* section select "Create".
 
 ![img_4.png](cicd-guide-img/img49.png)
 
@@ -354,7 +357,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## Route 53 and Certificate Manager 
 
-- Next we need a domain and if you don't have one yet, just navigate to **Route53** dashboard and go to "Register domain".
+- For next step a domain is needed and if you don't have one yet, just navigate to **Route53** dashboard and go to "Register domain".
 - If you already have a domain or your registration is finished, navigate to **Certificate Manager** dashboard and then select "Request":
 
 ![img.png](cicd-guide-img/img68.png)
@@ -369,7 +372,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 - Wait and check that certificate is validated and issued.
 
-- Navigate to **EC2** dashboard, then *Load Balancers* and select load balancer that we created earlier. Select "Add listener":
+- Navigate to **EC2** dashboard, then *Load Balancers* and select load balancer that was created earlier. Select "Add listener":
 
 ![img_4.png](cicd-guide-img/img72.png)
 
@@ -463,18 +466,18 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 }
 ```
 
-- Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster we made earlier and from the *Service* section copy your service's ARN and place that to the policy JSON:
+- Open another tab and navigate to **Elastic Container Serivice** dasboard and then go to the cluster made earlier and from the *Service* section copy your service's ARN and place that to the policy JSON:
 
 ![img_6.png](cicd-guide-img/img88.png)
 
-- Navigate to the Task definition we created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
-- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn*. Since we previously configured the same policy for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON.
+- Navigate to the Task definition created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
+- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn*. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON.
 
 ![img_7.png](cicd-guide-img/img89.png)
 
 ![img_8.png](cicd-guide-img/img90.png)
 
-- Go back to the *Roles* and go to the role that we created earlier and select "Add permission" and "Attach policies"
+- Go back to the *Roles* and go to the role that was created earlier and select "Add permission" and "Attach policies"
 
 ![img_9.png](cicd-guide-img/img91.png)
 
@@ -510,7 +513,7 @@ env:
                                                               # containerDefinitions section of your task definition
   AWS_IAM_ROLE: github-oidc-provider-aws-stories              # set this to your AWS OICD provider role
   ECS_TASK_DEFINITION_FAMILY: stories-task-definition         # set this to your Amazon ECS task definition family
-                                                              # (name that we gave to the task definition)
+                                                              # (name that was given to the task definition)
 
 permissions:
   contents: read
