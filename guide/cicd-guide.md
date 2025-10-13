@@ -682,21 +682,21 @@ jobs:
 
 ### References
 
-[^1] IAAS Academy. Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow
+[^1]: IAAS Academy. Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow
 
-[^2] AWS documentation. Best practices for connecting Amazon ECS to AWS services from inside your VPC: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
+[^2]: AWS documentation. Best practices for connecting Amazon ECS to AWS services from inside your VPC: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
 
-[^3] AWS documentation. NAT gateways: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
+[^3]: AWS documentation. NAT gateways: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
 
-[^4] AWS documentation. Using an AWS Secrets Manager VPC endpoint: https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
+[^4]: AWS documentation. Using an AWS Secrets Manager VPC endpoint: https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
-[^5] AWS documentation. Amazon ECR interface VPC endpoints (AWS PrivateLink): https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
+[^5]: AWS documentation. Amazon ECR interface VPC endpoints (AWS PrivateLink): https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 
-[^6] AWS Community Day. Peter Sankauskas - CI/CD: GitHub Actions to ECS: https://www.youtube.com/watch?v=kHYZX3-EQaw
+[^6]: AWS Community Day. Peter Sankauskas - CI/CD: GitHub Actions to ECS: https://www.youtube.com/watch?v=kHYZX3-EQaw
 
-[^7] aws-actions. Amazon ECS "Deploy Task Definition" Action for GitHub Actions README: https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file
+[^7]: aws-actions. Amazon ECS "Deploy Task Definition" Action for GitHub Actions README: https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file
 
-[^8] sajosam. GitHub Actions to AWS ECS: Build, Push, and Deploy Docker Images Easily: https://medium.com/@sajo02/github-actions-to-aws-ecs-build-push-and-deploy-docker-images-easily-7d4e8ab3efb6
+[^8]: sajosam. GitHub Actions to AWS ECS: Build, Push, and Deploy Docker Images Easily: https://medium.com/@sajo02/github-actions-to-aws-ecs-build-push-and-deploy-docker-images-easily-7d4e8ab3efb6
 
 
 
