@@ -6,10 +6,6 @@ In addition to the deployment pipeline, the document includes integration with *
 
 ⚠️ Disclaimer: I’m a student, not an AWS professional. This document is based on my own learning and experimentation.
 
-## References and resources
-
-The main reference for this document is **IAAS Academy’s** YouTube video *[“Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project)”](https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s)*. 
-
 ## Diagram (better name)
 
 ![img_4.png](img_4.png)
@@ -82,7 +78,9 @@ spring:
 
 
 
-## AWS VPC [^1]
+## AWS VPC
+
+Section reference: [^1]
 
 - Navigate to the **VPC** dashboard and select "Create VPC":
 
@@ -90,9 +88,9 @@ spring:
 
 ![img.png](cicd-guide-img/img4.png)
 
-#### NAT Gateway
+#### NAT gateway
 
-- [AWS docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html): *"You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services can't initiate a connection with those instances."*
+- [AWS docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html): *"You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services can't initiate a connection with those instances."* [^3] 
 - Consider using a NAT Gateway if your application running in a private subnet needs to make outbound server-side connections to external services (for example, calling an external API).
 - Client-side requests, such as those from a browser (e.g., Google Fonts or other external APIs called from the frontend), do not require a NAT Gateway because they use the client’s network connection.
 - For stories-app, outbound server-side connections are not required, so a NAT Gateway is not selected here. Instead, VPC endpoints are later configured and used to provide private access to AWS services.
@@ -123,6 +121,8 @@ spring:
 
 ## AWS Security Group 
 
+Section reference: [^1]
+
 - In **VPC** dashboard, go to *Security groups* and select "Create security group" 
 - Create following *Security groups*:
 
@@ -144,6 +144,8 @@ spring:
 
 
 ## AWS RDS
+
+Section reference: [^1]
 
 - Navigate to **Aurora and RDS** dashboard.
 - First create a *DB Subnet group*. Select "Create DB subnet group"
@@ -177,6 +179,8 @@ spring:
 
 ## AWS Secrets Manager, Secret rotation with Lambda, VPC endpoint
 
+Section reference: [^1].
+
 - Create the following *Security group*:
 
 ![img.png](cicd-guide-img/img18.png)
@@ -204,14 +208,11 @@ spring:
 
 ![img.png](cicd-guide-img/img25.png)
 
-- Next create following *Security group*:
+- Next create following *Security group* (rest of this section uses reference [^4]):
 
 ![img.png](cicd-guide-img/img26.png)
 
-
 - Navigate to **VPC** dashboard, go to *Endpoints* and "Create endpoint".
-
-https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
 ![img_13.png](cicd-guide-img/img27.png)
 
@@ -223,6 +224,8 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 
 ## Target Group
+
+Section reference: [^1]
 
 - Navigate to **EC2** dashboard and go to *Target Groups* and then select "Create target group"
 
@@ -237,6 +240,8 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 ## Application Load Balancer
 
+Section reference: [^1]
+
 - In the **EC2** dashboard, go to *Load Balancers*, select "Create load balancer", and then choose "Application Load Balancer".
 
 ![img_3.png](cicd-guide-img/img34.png)
@@ -250,9 +255,7 @@ https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overvie
 
 ## VPC endpoints
 
-https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
-
-https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
+Section references: [^5], [^2].
 
 ![img_2.png](cicd-guide-img/img54.png)
 
@@ -287,14 +290,15 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## IAM Roles & Policies
 
+Section reference: [^1]
+
 - Navigate to **IAM** dashboard and go to the *Policies* and select "Create policy".
 - Select "Secrets Manager" as a Service:
 
 ![img_6.png](cicd-guide-img/img37.png)
 
 - From the list check "GetSecretValue":
-- If you manage secrets in your app differently than described in this guide, you may also need to add *"secretsmanager:DescribeSecret"*. 
-  - https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
+- If you manage secrets in your app differently than described in this guide, you may also need to add *"secretsmanager:DescribeSecret"* [^4].
 
 ![img_7.png](cicd-guide-img/img38.png)
 
@@ -319,12 +323,16 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## ECS Cluster
 
+Section reference: [^1]
+
 - Navigate to **Elastic Container Service**, go to *Clusters* and select "Create cluster".
 
 ![img.png](cicd-guide-img/img45.png)
 
 
 ## ECS Task definition
+
+Section reference: [^1]
 
 - In **Elastic Container Service** go to *Task definition* and select "Create new task definition".
 
@@ -338,6 +346,8 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 
 ## ECS Service
+
+Section reference: [^1]
 
 - Navigate to the cluster created earlier and there in the *Services* section select "Create".
 
@@ -405,6 +415,8 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 ## OIDC provider
 
+Section reference: [^6].
+
 - Navigate to the **IAM** dashboard, then *Identity providers*, and select "Add provider" 
 
 ![img.png](cicd-guide-img/img82.png)
@@ -471,7 +483,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 ![img_6.png](cicd-guide-img/img88.png)
 
 - Navigate to the Task definition created earlier and view its JSON. Copy the values of the "taskRoleArn" and  "executionRoleArn" and place them to the policy JSON.
-- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn*. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON.
+- ‼️ According the [amazon-ecs-deploy-task-definition README](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#permissions) you should add both *taskRoleArn* and *executionRoleArn* [^7]. Since the same policy was previously configured for both roles, they are identical — and for that reason, I’ve included only one ARN in the policy JSON. 
 
 ![img_7.png](cicd-guide-img/img89.png)
 
@@ -490,6 +502,8 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connectin
 
 
 ## GitHub Actions
+
+Section reference: [^6], [^7], [^8].
 
 - Next in the project root create directories `.github/workflows` and then add `deploy.yml` to the `workflows` directory.
 - Add following lines to the `deploy.yml` 
@@ -668,13 +682,21 @@ jobs:
 
 ### References
 
-[^1] IAAS Academy. Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow&t=3337s
+[^1] IAAS Academy. Deploy Applications on AWS Fargate (ECS Tutorial + Hands-On Project): https://www.youtube.com/watch?v=C6v1GVHfOow
 
 [^2] AWS documentation. Best practices for connecting Amazon ECS to AWS services from inside your VPC: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-connecting-vpc.html
 
+[^3] AWS documentation. NAT gateways: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
 
+[^4] AWS documentation. Using an AWS Secrets Manager VPC endpoint: https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html
 
+[^5] AWS documentation. Amazon ECR interface VPC endpoints (AWS PrivateLink): https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
 
+[^6] AWS Community Day. Peter Sankauskas - CI/CD: GitHub Actions to ECS: https://www.youtube.com/watch?v=kHYZX3-EQaw
+
+[^7] aws-actions. Amazon ECS "Deploy Task Definition" Action for GitHub Actions README: https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file
+
+[^8] sajosam. GitHub Actions to AWS ECS: Build, Push, and Deploy Docker Images Easily: https://medium.com/@sajo02/github-actions-to-aws-ecs-build-push-and-deploy-docker-images-easily-7d4e8ab3efb6
 
 
 
