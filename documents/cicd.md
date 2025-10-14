@@ -8,7 +8,7 @@ In addition to the deployment pipeline, the document includes integration with *
 
 ### AWS Architecture Diagram
 
-Section reference: [^1], [^2].
+Diagram references: [^1], [^2].
 
 ![img_1.png](cicd-img/diagram.png)
 
