@@ -28,9 +28,6 @@ public class PageController {
     @GetMapping("/stories")
     public String stories(Model model) {
         List<Story> stories = storyService.findAll();
-        Story storyFromApi = storyService.getFromApi();
-        stories.add(storyFromApi);
-        storyService.getFromApi();
         model.addAttribute("stories", stories);
         return "stories";
     }
