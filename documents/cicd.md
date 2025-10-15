@@ -1,6 +1,6 @@
 # Deployment on AWS ECS (Fargate) with GitHub Actions CI/CD
 
-This document walks through building a **CI/CD pipeline** for a containerized application using **GitHub Actions** and deploying it to **AWS Elastic Container Service (ECS)** with **Fargate**. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. Example project uses Spring Boot and part of the document is Spring Boot specific.
+This document walks through building a **CI/CD pipeline** for a containerized application using **GitHub Actions** and deploying it to **AWS Elastic Container Service (ECS)** with **Fargate**. The setup demonstrates how to automate the build, containerization, and deployment process using AWS and GitHub workflows. Example project uses Spring Boot and part of the document is Spring Boot specific.
 
 In addition to the deployment pipeline, the document includes integration with **Amazon RDS** for database hosting and **AWS Secrets Manager** for credential management, including automatic secret rotation using **AWS Lambda**. The pipeline uses **GitHub’s OpenID Connect (OIDC) provider** to enable authentication between GitHub Actions and AWS.
 
@@ -256,6 +256,8 @@ Section reference: [^1].
 
 Section references: [^5], [^2].
 
+More info: https://docs.aws.amazon.com/vpc/latest/privatelink/privatelink-access-aws-services.html#aws-service-subnets-zones
+
 ![img_2.png](cicd-img/img54.png)
 
 ![img.png](cicd-img/img55.png)
@@ -417,6 +419,8 @@ Section reference: [^6], [^7].
 ## OIDC provider
 
 Section reference: [^8].
+
+More info: https://docs.github.com/en/actions/concepts/security/openid-connect#how-oidc-integrates-with-github-actions
 
 - Navigate to the **IAM** dashboard, then *Identity providers*, and select "Add provider" 
 
