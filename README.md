@@ -8,7 +8,7 @@ The project uses a simple Spring Boot MVC app with a PostgreSQL database.
 
 ## CI/CD Document 
 
-[Document](https://github.com/pinkkila/stories/blob/dev/documents/cicd.md) walks through building a CI/CD pipeline for a containerized application using GitHub Actions and deploying it to AWS Elastic Container Service (ECS) with Fargate. The setup demonstrates how to automate building, containerizing, and deploying your application using AWS and GitHub workflows. 
+[Document](https://github.com/pinkkila/stories/blob/dev/documents/cicd.md) walks through building a CI/CD pipeline for a containerized application using GitHub Actions and deploying it to AWS Elastic Container Service (ECS) with Fargate. The setup demonstrates how to automate the build, containerization, and deployment process using AWS and GitHub workflows. 
 
 In addition to the deployment pipeline, the document includes integration with Amazon RDS for database hosting and AWS Secrets Manager for credential management, including automatic secret rotation using AWS Lambda. The pipeline uses GitHub’s OpenID Connect (OIDC) provider to enable authentication between GitHub Actions and AWS.
 
