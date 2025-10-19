@@ -409,7 +409,7 @@ Section reference: [^6], [^7].
 
 ![img_11.png](cicd-img/img79.png)
 
-- It might take few a minutes but now your app should be available in both <your-domain>.com and www<area>.<your-domain>.com
+- It might take few a minutes but now your app should be available in both your-domain.com and www<area>.your-domain.com
 
 ![img_12.png](cicd-img/img80.png)
 
